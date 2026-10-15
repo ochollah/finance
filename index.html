@@ -1,0 +1,2766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial Matrix System | Potential to Purpose & Kingdom Stewardship</title>
+<!-- Firebase App & Modular SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyAy9SuPg6htbouDXP_r-lih9Jo6DjJg9dM",
+  authDomain: "finance-56053.firebaseapp.com",
+  projectId: "finance-56053",
+  storageBucket: "finance-56053.firebasestorage.app",
+  messagingSenderId: "489940387240",
+  appId: "1:489940387240:web:63fe3d942f0fc761b7899d",
+  measurementId: "G-T6CPMC2YK0"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.firebaseAuth = auth;
+  window.firebaseDb = db;
+  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+  window.sendPasswordResetEmail = sendPasswordResetEmail;
+  window.signOut = signOut;
+  window.onAuthStateChanged = onAuthStateChanged;
+  window.doc = doc;
+  window.setDoc = setDoc;
+  window.getDoc = getDoc;
+  window.collection = collection;
+  window.getDocs = getDocs;
+  window.serverTimestamp = serverTimestamp;
+</script>
+<!-- Chart.js & html2pdf CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+  --navy: #082d49;
+  --navy2: #103e5c;
+  --gold: #c99b31;
+  --gold2: #f3d77e;
+  --green: #17864c;
+  --red: #b9443d;
+  --ink: #17364b;
+  --muted: #526677;
+  --line: #c8dce5;
+  --paper: #f4f8fa;
+  --white: #fff;
+  --gold-bg: #fffbf0;
+}
+* { box-sizing: border-box; }
+html, body { width: 100%; margin: 0; padding: 0; overflow-x: hidden; }
+body { background: var(--paper); color: var(--ink); font: 14px/1.5 Inter, Segoe UI, Arial, sans-serif; }
+
+header {
+  background: linear-gradient(110deg, var(--navy), #124d6c);
+  color: #fff;
+  padding: 20px 4%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 5px solid var(--gold);
+}
+.brand { display: flex; gap: 14px; align-items: center; max-width: 100%; }
+.logo { width: 50px; height: 50px; flex-shrink: 0; border: 2px solid var(--gold2); border-radius: 50%; display: grid; place-items: center; color: var(--gold2); font-size: 26px; }
+.eyebrow { text-transform: uppercase; letter-spacing: .1em; font-size: 10px; color: var(--gold2); font-weight: 800; }
+.brand h1 { font-size: clamp(20px, 2.5vw, 32px); line-height: 1.1; margin: 2px 0; word-break: break-word; }
+.brand p { margin: 3px 0 0; color: #dce9f0; font-size: 13px; }
+.quote { text-align: right; max-width: 300px; color: #f5df9b; font-style: italic; font-size: 13px; }
+.quote small { display: block; color: #fff; font-style: normal; margin-top: 4px; }
+
+/* Landing / Auth Modal */
+#landingPage { position: fixed; inset: 0; background: linear-gradient(135deg, var(--navy), #041624); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 15px; overflow-y: auto; }
+.landing-card { background: var(--white); max-width: 440px; width: 100%; padding: 28px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-top: 6px solid var(--gold); }
+.landing-card h2 { color: var(--navy); font-size: 22px; margin-top: 0; margin-bottom: 6px; text-align: center; }
+.landing-card p.sub-landing { text-align: center; color: var(--muted); margin-bottom: 20px; font-size: 12.5px; }
+.tab-row { display: flex; margin-bottom: 18px; border-bottom: 2px solid var(--line); }
+.tab-btn { flex: 1; background: none; border: none; padding: 10px; font-weight: 700; color: var(--muted); cursor: pointer; font-size: 13px; }
+.tab-btn.active { color: var(--navy); border-bottom: 3px solid var(--gold); margin-bottom: -2px; }
+
+.auth-bar { background: #103e5c; color: #fff; padding: 8px 4%; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-size: 12.5px; border-bottom: 1px solid #1a4f73; }
+.nav-tabs { background: #0d3652; display: flex; padding: 0 4%; gap: 8px; border-bottom: 2px solid var(--gold); overflow-x: auto; white-space: nowrap; }
+.nav-tab-btn { background: none; border: none; color: #cbdbe2; padding: 12px 16px; font-weight: 700; cursor: pointer; font-size: 12.5px; text-transform: uppercase; letter-spacing: .05em; flex-shrink: 0; }
+.nav-tab-btn.active { color: #fff; background: var(--navy2); border-top: 3px solid var(--gold); }
+
+main { width: 100%; max-width: 1500px; margin: 0 auto; padding: 15px 4%; display: grid; gap: 16px; }
+
+/* Dashboard Grids with fully responsive column clamps */
+.topgrid { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(0, 2fr) minmax(260px, 0.9fr); gap: 15px; }
+.lowergrid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 15px; }
+.panel { background: var(--white); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-width: 0; overflow-hidden; box-shadow: 0 2px 8px rgba(16,62,92,0.04); }
+.panel h2 { font-size: 15px; margin: 0 0 4px; text-transform: uppercase; color: var(--navy); }
+.sub { font-size: 11.5px; color: var(--muted); margin: 0 0 12px; }
+
+.field { display: grid; gap: 5px; margin-bottom: 11px; }
+.field label { font-size: 11.5px; font-weight: 750; color: var(--ink); }
+.field input, .field textarea, .field select { width: 100%; border: 1px solid #c4d6df; border-radius: 7px; padding: 8px 10px; font: inherit; background: #fff; color: var(--ink); }
+textarea { resize: vertical; min-height: 60px; }
+.field input:focus, .field textarea:focus, .field select:focus { outline: 2px solid #b8d9e8; border-color: #5d9bb8; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { border: 0; border-radius: 7px; padding: 9px 12px; font-weight: 800; cursor: pointer; background: var(--navy); color: #fff; font-size: 12.5px; }
+.btn.gold { background: var(--gold); color: #1e2c34; }
+.btn.outline { background: white; color: var(--navy); border: 1px solid var(--line); }
+.btn:hover { filter: brightness(1.08); }
+
+.scorebox { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f7fafb; border-radius: 10px; margin: 10px 0; }
+.ring { --pct: 50; width: 78px; height: 78px; flex: 0 0 auto; border-radius: 50%; background: conic-gradient(var(--green) calc(var(--pct)*1%), #dce5e8 0); display: grid; place-items: center; position: relative; }
+.ring:before { content: ""; position: absolute; inset: 7px; background: #fff; border-radius: 50%; }
+.ring strong { position: relative; font-size: 18px; color: var(--navy); }
+.status { font-weight: 800; color: var(--green); font-size: 13px; }
+
+.matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.metric { border: 1px solid #eedca8; border-radius: 8px; padding: 10px; background: linear-gradient(145deg, #fff9e8, #fff); display: flex; flex-direction: column; gap: 5px; }
+.metric .num { font-size: 10.5px; color: #7c6121; font-weight: 800; }
+.metric h3 { font-size: 12.5px; margin: 0; color: #143b53; }
+.metric p { font-size: 11.5px; margin: 0; flex: 1; color: var(--muted); }
+.metric .ref { font-size: 10.5px; color: #6c7880; }
+
+.bar { height: 7px; border-radius: 99px; background: #e4ecef; overflow: hidden; }
+.bar span { display: block; height: 100%; background: linear-gradient(90deg, #14744a, #28aa67); width: 50%; transition: width .2s; }
+.scoreline { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); }
+.range { width: 100%; accent-color: var(--green); }
+.range-label { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; margin: 5px 0; }
+
+/* Sub-topic Testing Accordion */
+.subtopic-group { border: 1px solid #d4e4ec; border-radius: 8px; margin-bottom: 10px; background: #fafcfd; overflow: hidden; }
+.subtopic-header { background: #eaf2f6; padding: 9px 12px; font-weight: bold; font-size: 12.5px; color: var(--navy); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+.subtopic-body { padding: 10px 12px; display: grid; gap: 8px; }
+.subtopic-item { display: grid; grid-template-columns: minmax(180px, 1.4fr) minmax(130px, 1fr); gap: 10px; align-items: center; font-size: 11.5px; }
+
+/* User Study Dashboard Full Curriculum Styles */
+.study-sub-nav { background: var(--navy2); color: #fff; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; }
+.study-sub-nav a { color: #dce9f0; text-decoration: none; font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; }
+.study-sub-nav a:hover { background: var(--gold); color: var(--navy); }
+
+.curriculum-container { display: grid; gap: 20px; }
+.curriculum-module { background: var(--white); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(16,62,92,0.05); }
+.curriculum-header { background: linear-gradient(135deg, var(--navy), var(--navy2)); color: var(--white); padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.curriculum-header h3 { margin: 0; font-size: 17px; color: var(--gold2); letter-spacing: .03em; }
+.curriculum-body { padding: 20px; display: grid; gap: 16px; }
+.overview-box { background: var(--gold-bg); border: 1px solid #eedca8; border-radius: 8px; padding: 14px 18px; font-size: 13.5px; }
+.curriculum-subtopic { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: #fafcfd; margin-bottom: 12px; }
+.curriculum-subtopic h4 { margin: 0 0 8px; color: var(--navy); font-size: 14.5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.scripture-box { background: #f0f7f4; border-left: 4px solid var(--green); padding: 10px 14px; border-radius: 4px; font-style: italic; font-size: 13px; color: #124d31; margin: 10px 0; }
+.scripture-box strong { font-style: normal; display: block; margin-bottom: 3px; color: var(--navy); }
+.indicator-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 10px; }
+.indicator-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 6px; font-size: 12.5px; }
+.indicator-box h5 { margin: 0 0 5px; text-transform: uppercase; font-size: 10.5px; letter-spacing: .08em; color: var(--navy); }
+
+.growth-matrix-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+.growth-matrix-table th, .growth-matrix-table td { border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+.growth-matrix-table th { background: var(--navy); color: #fff; font-weight: 700; text-transform: uppercase; font-size: 11.5px; }
+.growth-matrix-table tr:nth-child(even) { background: #f8fafc; }
+
+.pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 14px; }
+.pillar-card { background: var(--paper); border-left: 4px solid var(--gold); border-radius: 8px; padding: 16px; }
+.pillar-card h3 { margin: 0 0 6px; color: var(--navy); font-size: 15px; text-transform: uppercase; }
+.pillar-card p { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+.principle { display: grid; grid-template-columns: 1.2fr 1.2fr 1.5fr auto; gap: 8px; padding: 7px 0; border-bottom: 1px solid #e9eff2; font-size: 11.5px; align-items: center; }
+.principle:last-child { border: 0; }
+.pill { font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 99px; background: #e0f4e8; color: #17643b; display: inline-block; white-space: nowrap; }
+
+.steps { display: grid; gap: 8px; }
+.step { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; }
+.stepno { background: var(--navy); color: #fff; border-radius: 50%; width: 25px; height: 25px; display: grid; place-items: center; font-weight: 800; font-size: 12px; }
+.step p { margin: 2px 0; font-size: 11.5px; color: var(--muted); }
+.checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.checklist label { display: flex; gap: 8px; align-items: flex-start; font-size: 11.5px; cursor: pointer; }
+.checklist input { accent-color: var(--green); margin-top: 2px; }
+
+.footer { background: var(--navy); color: #fff; border-radius: 10px; padding: 15px 4%; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; text-align: center; }
+.footer strong { display: block; color: var(--gold2); font-size: 13px; }
+.footer span { font-size: 10.5px; color: #d7e5eb; }
+
+.smallmuted { font-size: 11px; color: var(--muted); }
+.alert { padding: 9px; border-radius: 8px; background: #fff4df; color: #725400; font-size: 11.5px; }
+.resultgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.result { padding: 10px; background: #f4f8fa; border-radius: 8px; text-align: center; }
+.result strong { font-size: 17px; display: block; color: var(--navy); }
+.result span { font-size: 10.5px; color: var(--muted); }
+
+.history-table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 6px; }
+.history-table th, .history-table td { border: 1px solid var(--line); padding: 5px 7px; text-align: left; }
+.history-table th { background: var(--paper); color: var(--navy); }
+.locked-banner { background: #e0f4e8; color: #17643b; padding: 9px; border-radius: 8px; font-weight: bold; font-size: 12px; text-align: center; margin-bottom: 10px; border: 1px solid #17864c; }
+.hidden { display: none !important; }
+.module-header {
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  color: var(--white);
+  padding: 20px 24px;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.module-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--gold2);
+  letter-spacing: .03em;
+}
+
+.module-header .scripture-badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--gold2);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.module-content {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  padding: 24px;
+}
+
+.overview-box {
+  background: var(--gold-bg);
+  border: 1px solid #eedca8;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+..subtopic-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.subtopic-title {
+  background: #eaf2f6;
+  padding: 12px 18px;
+  font-weight: 800;
+  color: var(--navy);
+  font-size: 15px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subtopic-body {
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.scripture-box {
+  background: #f0f7f4;
+  border-left: 4px solid var(--green);
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-style: italic;
+  font-size: 13.5px;
+  color: #124d31;
+}
+
+.scripture-box strong {
+  font-style: normal;
+  display: block;
+  margin-bottom: 4px;
+  color: var(--navy);
+}
+
+/* Responsive Media Breakdown */
+@media(max-width: 1200px) {
+  .topgrid { grid-template-columns: 1fr 1.6fr; }
+  .topgrid > .panel:last-child { grid-column: 1 / -1; }
+  .lowergrid { grid-template-columns: 1fr; }
+}
+@media(max-width: 768px) {
+  header { flex-direction: column; align-items: flex-start; }
+  .quote { text-align: left; max-width: 100%; }
+  .topgrid { grid-template-columns: 1fr; }
+  .two { grid-template-columns: 1fr; }
+  .subtopic-item { grid-template-columns: 1fr; }
+  .principle { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width: 768px) {
+  .header-container { flex-direction: column; text-align: center; }
+  .header-quote { text-align: center; border-left: 0; border-top: 2px solid var(--gold); padding-top: 10px; }
+  .indicator-grid { grid-template-columns: 1fr; }
+  .growth-matrix-table { display: block; overflow-x: auto; }
+}
+@media print {
+  body { background: #fff; }
+  header, .auth-bar, .nav-tabs, #landingPage, .btnrow, .range, .field input, .field textarea, .field select { display: none !important; }
+  .panel { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  main { padding: 0; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Landing Page / Auth Modal -->
+<div id="landingPage">
+  <div class="landing-card">
+    <h2>Financial Matrix System</h2>
+    <p class="sub-landing">Potential → Purpose → Plan → Prosper <br><small>Kingdom Stewardship & Advanced Practical Indicators</small></p>
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabLoginBtn">Sign In</button>
+      <button class="tab-btn" id="tabSignupBtn">Register</button>
+    </div>
+    <div id="loginFormContainer">
+      <div class="field"><label>Email Address</label><input type="email" id="landingEmail" placeholder="name@example.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="landingPassword" placeholder="••••••••"></div>
+      <div class="btnrow" style="margin-top:16px"><button class="btn" style="width:100%" id="landingLoginBtn">Sign In to Matrix</button></div>
+      <p style="text-align:center;margin-top:12px;font-size:12px"><a href="#" id="forgotPasswordLink" style="color:var(--navy)">Forgot Password?</a></p>
+    </div>
+    <div id="signupFormContainer" class="hidden">
+      <div class="field"><label>Email Address</label><input type="email" id="landingSignupEmail" placeholder="name@example.com"></div>
+      <div class="field"><label>Create Password</label><input type="password" id="landingSignupPassword" placeholder="••••••••"></div>
+      <div class="btnrow" style="margin-top:16px"><button class="btn gold" style="width:100%;color:#1e2c34" id="landingRegisterBtn">Create Account</button></div>
+    </div>
+    <p id="landingError" style="color:var(--red);font-size:12px;text-align:center;margin-top:12px"></p>
+  </div>
+</div>
+
+<div class="auth-bar">
+  <div id="authStatus">Connecting to Firebase...</div>
+  <div><button class="btn outline" style="padding:3px 8px;font-size:11px;color:#fff;border-color:#5d9bb8" id="headerLogout">Sign Out</button></div>
+</div>
+
+<!-- Navigation Tabs: Separate Dashboards -->
+<div class="nav-tabs">
+  <button class="nav-tab-btn active" id="navInputTab">1. User Input Dashboard</button>
+  <button class="nav-tab-btn" id="navStudyTab">2. User Study Dashboard</button>
+  <button class="nav-tab-btn" id="navReportTab">3. User Report Dashboard</button>
+</div>
+
+<header>
+  <div class="brand"><div class="logo">✥</div><div><div class="eyebrow">Build your future · Create value · Make an impact</div><h1>FINANCIAL MATRIX <span style="color:#f3d77e">SYSTEM</span></h1><p>Potential → Purpose → Plan → Prosper</p></div></div>
+  <div class="quote">“The plans of the diligent lead to profit.”<small>Proverbs 21:5 · A stewardship journey, not merely a personal gain</small></div>
+</header>
+
+<main>
+  <!-- VIEW 1: USER INPUT DASHBOARD -->
+  <div id="userInputDashboard">
+    <div class="topgrid">
+      <section class="panel">
+        <h2>1. Your input profile</h2><p class="sub">Use your answers to personalize the matrix.</p>
+        <div id="lockedMessage" class="hidden"></div>
+        <div class="field"><label for="activeMonth">Active Matrix Month</label><input type="month" id="activeMonth"></div>
+        <div class="field"><label for="name">Name / learner ID (optional)</label><input id="name" placeholder="Enter name or ID"></div>
+        <div class="field"><label for="age">Age group</label><select id="age"><option>Under 18</option><option selected>18–35</option><option>36–55</option><option>Over 55</option></select></div>
+        <div class="field"><label for="position">Current financial position</label><select id="position"><option>Not yet earning</option><option>Employed</option><option selected>Self-employed / business owner</option><option>Irregular income</option><option>Improving existing finances</option></select></div>
+        <div class="field"><label for="abilities">Key abilities / talents</label><textarea id="abilities" placeholder="e.g. creativity, communication, problem solving"></textarea></div>
+        <div class="field"><label for="interests">Interests</label><textarea id="interests" placeholder="e.g. technology, business, community development"></textarea></div>
+        <div class="field"><label for="problems">Problems you want to solve</label><textarea id="problems" placeholder="e.g. youth employment, food security, access to education"></textarea></div>
+        <div class="field"><label for="skills">Skills to develop</label><textarea id="skills" placeholder="e.g. digital marketing, bookkeeping, technical skills"></textarea></div>
+        <div class="field"><label for="goal">Financial / vocational goal</label><textarea id="goal" placeholder="e.g. grow a business, increase income, build savings"></textarea></div>
+        <h2 style="margin-top:15px">Financial inputs (KSh)</h2>
+        <div class="two">
+          <div class="field"><label for="income">Monthly income</label><input id="income" type="number" min="0" value="20000"></div>
+          <div class="field"><label for="expenses">Monthly expenses</label><input id="expenses" type="number" min="0" value="11000"></div>
+          <div class="field"><label for="savings">Current savings</label><input id="savings" type="number" min="0" value="3000"></div>
+          <div class="field"><label for="debt">Outstanding debt</label><input id="debt" type="number" min="0" value="0"></div>
+        </div>
+        <div class="btnrow" id="inputActionRow" style="margin-top:12px">
+          <button class="btn" id="evaluate">Evaluate & Lock</button>
+          <button class="btn outline" id="reset">Reset</button>
+          <button class="btn gold" id="saveCloud">Save Sync</button>
+        </div>
+        <p class="smallmuted" id="cloudStatus" style="margin-top:8px">Real-time sync active with Firebase Firestore.</p>
+      </section>
+
+      <section class="panel">
+        <h2>3. Financial matrix overview</h2><p class="sub">Ten key areas producing weighted readiness and practical sub-topic testing.</p>
+        <div class="matrix" id="matrix"></div>
+        <div class="scorebox"><div class="ring" id="alignmentRing" style="--pct:70"><strong id="alignmentText">70%</strong></div><div><strong>Potential & purpose match</strong><p class="sub" style="margin:2px 0">Self-rated alignment between abilities, interests, problems and goal.</p><div class="range-label"><label for="alignment">Alignment score</label><strong id="alignmentValue">70%</strong></div><input class="range" id="alignment" type="range" min="0" max="100" step="5" value="70"></div></div>
+        <div class="resultgrid">
+          <div class="result"><span>Financial knowledge</span><strong id="knowledgeScore">50%</strong></div>
+          <div class="result"><span>Financial health</span><strong id="healthScore">—</strong></div>
+          <div class="result"><span>Monthly balance</span><strong id="balance">KSh 9,000</strong></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Overall success rate</h2><p class="sub">Readiness indicator—not a guarantee of future outcomes.</p>
+        <div class="scorebox" style="justify-content:center;flex-direction:column;text-align:center"><div class="ring" id="overallRing" style="--pct:63;width:110px;height:110px"><strong id="overallScore">63%</strong></div><div><strong id="overallStatus" class="status">Developing readiness</strong><p id="statusDesc" class="sub" style="margin:3px 0">Use your priority actions to strengthen readiness.</p></div></div>
+        <h2>Key success factors</h2>
+        <ul class="checklist" style="margin-top:8px">
+          <li><label><input type="checkbox" class="successfactor"> Clear goals and purpose</label></li>
+          <li><label><input type="checkbox" class="successfactor"> Consistent learning and application</label></li>
+          <li><label><input type="checkbox" class="successfactor"> Discipline in money management</label></li>
+          <li><label><input type="checkbox" class="successfactor"> Appropriate support and mentorship</label></li>
+          <li><label><input type="checkbox" class="successfactor"> Faith and perseverance</label></li>
+        </ul>
+        <div class="alert" style="margin-top:12px">A low score is a learning signal, not a judgment of personal worth or spiritual maturity.</div>
+      </section>
+    </div>
+
+    <div class="lowergrid" style="margin-top:16px">
+      <section class="panel">
+        <h2>4. Practical Testing & Sub-Areas of Study</h2><p class="sub">Assign percent-based mastery across sub-topics for all 10 Financial Keys.</p>
+        <div id="subtopicTestingContainer"></div>
+      </section>
+      <section class="panel">
+        <h2>5. Kingdom perspective on stewardship</h2><p class="sub">Live with integrity. Manage with wisdom. Serve with your resources.</p><div id="principles"></div>
+        <p class="smallmuted" style="margin-top:12px">Scriptures provide ethical and spiritual foundations; the system does not equate wealth with divine favour or guarantee financial outcomes.</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- VIEW 2: USER STUDY DASHBOARD (Comprehensive Learning Model & Full Curriculum) -->
+  <div id="userStudyDashboard" class="hidden">
+    <div class="panel" style="margin-bottom:16px; background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff;">
+      <h2 style="color:var(--gold2)">Comprehensive Kingdom Financial Study Curriculum & Learning Model</h2>
+      <p class="sub" style="color:#dce9f0">Complete architectural breakdown of the 6 Pillars, all 10 Detailed Matrix Modules, Sub-Topics, Scriptural Anchors, Modern Financial Indicators, and Growth Stages.</p>
+    </div>
+
+    <!-- Study Sub-Navigation -->
+    <nav class="table-of-contents">
+  <a href="#core-framework">1. Core Framework</a>
+  <a href="#matrix-1">Mod 1: Financial Literacy</a>
+  <a href="#matrix-2">Mod 2: Income Power</a>
+  <a href="#matrix-3">Mod 3: Budget & Cash Flow</a>
+  <a href="#matrix-4">Mod 4: Saving & Reserves</a>
+  <a href="#matrix-5">Mod 5: Enterprise</a>
+  <a href="#matrix-6">Mod 6: Investment</a>
+  <a href="#matrix-7">Mod 7: Debt & Protection</a>
+  <a href="#matrix-8">Mod 8: Family & Community</a>
+  <a href="#matrix-9">Mod 9: Kingdom Stewardship</a>
+  <a href="#matrix-10">Mod 10: Legacy & Planning</a>
+  <a href="#growth-pattern">2. Growth Pattern</a>
+</nav>
+
+<main>
+
+  <!-- SECTION 1: CORE FRAMEWORK ARCHITECTURE -->
+  <section id="core-framework">
+    <div class="section-title">
+      <span class="num">1</span>
+      <span>Core Philosophical & Functional Architecture</span>
+    </div>
+
+    <div class="card">
+      <h2>The 6 Pillars of the Kingdom Financial Continuum</h2>
+      <p>The Financial Matrix Model bridges modern financial science with biblical kingdom stewardship. True financial success is not merely personal wealth accumulation, but the systematic conversion of God-given human potential into purposeful, high-impact enterprise that honors God and serves humanity.</p>
+      
+      <div class="pillar-grid" style="margin-top: 20px;">
+        <div class="pillar-card">
+          <h3>1. Potential (Genesis 1:26–28)</h3>
+          <p>The inherent talents, intellectual capacity, geographic positioning, and spiritual gifts placed within an individual by the Creator. It represents dormant economic capital waiting to be cultivated.</p>
+        </div>
+        <div class="pillar-card">
+          <h3>2. Purpose (Jeremiah 29:11)</h3>
+          <p>The alignment of potential toward solving specific real-world problems. Purpose transforms raw ability into a structured vocational calling that creates measurable societal value.</p>
+        </div>
+        <div class="pillar-card">
+          <h3>3. Productivity (Proverbs 14:23)</h3>
+          <p>The practical execution of skills, labor, business operations, and value delivery. Productivity is the operational engine that converts purpose into cash flow and economic output.</p>
+        </div>
+        <div class="pillar-card">
+          <h3>4. Provision (Deuteronomy 8:18)</h3>
+          <p>The financial inflow, revenue, surplus, and wealth generated as a result of diligent productivity. Recognized not as personal entitlement, but as divine empowerment to build resources.</p>
+        </div>
+        <div class="pillar-card">
+          <h3>5. Stewardship (Luke 16:10–12)</h3>
+          <p>The strategic, ethical, and disciplined management of provision—encompassing budgeting, debt elimination, tax compliance, risk protection, and capital allocation.</p>
+        </div>
+        <div class="pillar-card">
+          <h3>6. Prosperity & Impact (Proverbs 11:25)</h3>
+          <p>The final outcome: sustainable generational surplus, community development, charitable funding, kingdom advancement, and lasting legacy that transforms communities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: THE 10 DETAILED FINANCIAL MATRIX MODULES -->
+  <section id="detailed-modules">
+    <div class="section-title">
+      <span class="num">2</span>
+      <span>The 10 Keys of the Financial Matrix: Sub-Topics & Scriptural Models</span>
+    </div>
+
+    <!-- MODULE 1 -->
+    <article class="subtopic-card" id="matrix-1">
+      <div class="module-header">
+        <h2>1. FINANCIAL LITERACY</h2>
+        <span class="scripture-badge">Foundation Key · Luke 14:28</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Financial literacy is the cognitive foundation of economic freedom. It encompasses the ability to comprehend financial systems, track monetary units, evaluate economic risks, and distinguish between income-generating assets and wealth-draining liabilities.
+        </div>
+
+        <!-- Subtopic 1.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>1.1 Money & Medium of Exchange</span>
+            <span class="pill">Fundamental</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Understanding money not as a physical artifact, but as a standardized claim on human labor, time, and value. Money functions as a store of value, unit of account, and medium of trade. Modern currency systems rely on fiat value, monetary policy, and interest rate structures.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Genesis 41:56–57 & Genesis 23:15–16</strong>
+              “So Abraham listened to Ephron, and Abraham weighed out for Ephron the silver that he had named in the hearing of the Hittites, four hundred shekels of silver, according to the weights current among the merchants.” — Scripture emphasizes fair weights, precise measurement, and clear mediums of trade in economic transactions.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Inflation Adjusted Purchasing Power Ratio: $P_a = \frac{P_n}{(1 + i)^t}$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Monetary Integrity & Honesty: Maintaining accurate accounts free of fraud or currency devaluation deceit (Leviticus 19:35-36).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 1.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>1.2 Budgeting & Cost Architecture</span>
+            <span class="pill">Operational</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> The science of mapping income inflows against fixed, variable, and discretionary outflows. A budget is a proactive financial roadmap that forces money to obey strategic priorities rather than reactive spending impulses.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Luke 14:28–30</strong>
+              “For which of you, desiring to build a tower, does not first sit down and count the cost, whether he has enough to complete it? Otherwise, when he has laid a foundation and is not able to finish, all who see it begin to mock him...”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Budget Variance Index (BVI): $\text{BVI} = \frac{\text{Actual Expenses} - \text{Budgeted Expenses}}{\text{Budgeted Expenses}} \times 100$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Diligent Counting: Proactive planning and deliberate resource allocation prior to capital commitment.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 1.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>1.3 Assets vs. Liabilities Distinction</span>
+            <span class="pill">Strategic</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> An asset is any property or instrument that puts net cash into your pocket (positive cash flow or capital growth). A liability is anything that pulls cash out of your pocket. True financial strength requires expanding income-producing assets while minimizing non-performing liabilities.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 24:27</strong>
+              “Prepare your work outside; get everything ready for yourself in the field, and after that build your house.” — Prioritize establishing income-producing assets (the agricultural field) before spending on consumer liabilities (the personal house).
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Asset-to-Liability Ratio: $\text{ALR} = \frac{\text{Total Income-Producing Assets}}{\text{Total Consumer Liabilities}}$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Order of Enterprise: Capital must be deployed into productive wealth-generating vehicles prior to personal consumption.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 1.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>1.4 Risk Management & Economic Exposure</span>
+            <span class="pill">Protective</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Assessing downside risks including inflation, market volatility, sickness, currency devaluation, and operational disruptions. Includes constructing risk mitigation strategies such as hedging, emergency liquidity, and insurance protection.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 22:3</strong>
+              “The prudent sees danger and hides himself, but the simple go on and suffer for it.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Downside Risk Exposure Index & Coverage Ratio.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Prudent Foresight: Anticipating systemic disruptions and creating protective financial buffers.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 2 -->
+    <article class="subtopic-card" id="matrix-2">
+      <div class="module-header">
+        <h2>2. INCOME & EARNING POWER</h2>
+        <span class="scripture-badge">Productivity Key · Proverbs 22:29</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Earning power represents the rate at which human potential is converted into economic revenue through specialized skills, market solutions, employment excellence, and entrepreneurial value creation.
+        </div>
+
+        <!-- Subtopic 2.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>2.1 Skill Monetization & Market Value</span>
+            <span class="pill">Core Skill</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> The market compensates individuals based on the perceived value, rarity, and difficulty of replacing their skills. Transforming raw talent into high-value expertise commands premium market positioning.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 22:29</strong>
+              “Do you see a man skillful in his work? He will stand before kings; he will not stand before obscure men.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Hourly Earning Velocity (HEV): $\text{HEV} = \frac{\text{Net Income}}{\text{Total Hours Worked}}$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Vocational Diligence: Developing exceptional skill and mastery that commands honor and market premium.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 2.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>2.2 Active vs. Passive vs. Portfolio Streams</span>
+            <span class="pill">Expansion</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Transitioning from linear active income (trading hours for money) to leveraged passive income (business systems, intellectual property) and portfolio income (dividends, interest, capital gains).</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Ecclesiastes 11:2</strong>
+              “Give a portion to seven, or even to eight, for you know not what disaster may happen on earth.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Passive Income Ratio: $\text{PIR} = \frac{\text{Passive + Portfolio Income}}{\text{Total Monthly Living Expenses}} \times 100$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Diversified Provision: Establishing multiple channels of income to safeguard against localized failures.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 2.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>2.3 Value Proposition & Problem Solving</span>
+            <span class="pill">Strategy</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Wealth is a byproduct of solving human problems. The greater the complexity and magnitude of the problem solved, the higher the financial compensation generated.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Genesis 41:38–41</strong>
+              “And Pharaoh said to his servants, ‘Can we find a man like this, in whom is the Spirit of God?’... You shall be over my house, and all my people shall order themselves as you command.” — Joseph solved a national famine crisis and was elevated to supreme economic authority.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Economic Surplus Delivered per Client/Employer.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Servant Leadership in Market: Generating wealth by providing profound solutions to societal needs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 2.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>2.4 Negotiation & Compensation Equity</span>
+            <span class="pill">Advocacy</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Articulating value, securing fair market rates, structuring performance bonuses, and ensuring equity in employment or contractual agreements.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Jeremiah 22:13 & Colossians 4:1</strong>
+              “Woe to him who builds his house by unrighteousness... who uses his neighbor's service without wages and gives him nothing for his work.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Compensation-to-Value Realization Ratio.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Fair Wage Equity: Demanding and giving honest, righteous compensation for labor delivered.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 3 -->
+    <article class="subtopic-card" id="matrix-3">
+      <div class="module-header">
+        <h2>3. BUDGET & CASH FLOW MANAGEMENT</h2>
+        <span class="scripture-badge">Stewardship Key · Proverbs 21:5</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Cash flow management is the heartbeat of solvency. Mastering inflows and outflows prevents economic hemorrhaging, creates investment surpluses, and maintains liquidity.
+        </div>
+
+        <!-- Subtopic 3.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>3.1 Needs vs. Wants Allocation Architecture</span>
+            <span class="pill">Control</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Categorizing cash outflows into survival necessities (housing, food, health), productivity investments (education, business tools), and discretionary luxury wants. Employs frameworks like the 50/30/20 rule or Kingdom 10/10/80 model (10% Giving, 10% Capital Savings, 80% Living).</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Isaiah 55:2</strong>
+              “Why do you spend your money for that which is not bread, and your labor for that which does not satisfy?”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Essential Expense Ratio: $\text{EER} = \frac{\text{Fixed Essential Expenses}}{\text{Total Net Income}} \times 100 \le 50\%$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Disciplined Consumption: Exercising temperance and avoiding wasteful expenditure on non-essentials.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 3.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>3.2 Real-Time Cash Flow Tracking</span>
+            <span class="pill">Execution</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Implementing real-time tracking systems (digital ledgers, accounting software, mobile apps) to log every income and expense transaction, preventing micro-leakages.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 27:23</strong>
+              “Know well the condition of your flocks, and give attention to your herds.” — The modern flock is your bank account, digital wallets, receivables, and ledger balances.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Ledger Accuracy Rate & Daily Cash Leakage Metric.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Vigilant Oversight: Maintaining precise operational awareness of all managed resources.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 3.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>3.3 Net Surplus Generation</span>
+            <span class="pill">Outcome</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Widening the gap between income and expenses to guarantee a monthly positive cash flow surplus. A financial plan without surplus is stagnant and vulnerable.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 13:11</strong>
+              “Wealth gained hastily will dwindle, but whoever gathers little by little will increase it.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Monthly Savings Rate (MSR): $\text{MSR} = \frac{\text{Total Net Monthly Surplus}}{\text{Total Gross Monthly Income}} \times 100 \ge 20\%$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Incremental Accumulation: Consistently preserving surplus capital over time through steady discipline.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 3.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>3.4 Cash Flow Smoothing for Irregular Incomes</span>
+            <span class="pill">Advanced</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Managing seasonal, commission, or business profits by establishing a "holding tank" account. Paying yourself a baseline salary during high-earning months to survive low-earning months.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Genesis 41:34–36</strong>
+              “Let Pharaoh appoint overseers over the land and take one-fifth of the produce of the land of Egypt during the seven plentiful years... That food shall be a reserve for the land against the seven years of famine.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Buffer Tank Index (BTI) = Months of Baseline Payroll Saved.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Seasonal Management: Storing surplus during seasons of abundance to navigate seasons of scarcity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 4 -->
+    <article class="subtopic-card" id="matrix-4">
+      <div class="module-header">
+        <h2>4. SAVING & EMERGENCY RESERVES</h2>
+        <span class="scripture-badge">Protection Key · Proverbs 21:20</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Saving is the defensive perimeter of personal finance. It provides liquidity, protects against unexpected shocks, and provides seed capital for future growth opportunities.
+        </div>
+
+        <!-- Subtopic 4.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>4.1 Emergency Reserve Liquidity</span>
+            <span class="pill">Defense</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Amassing 3 to 12 months of essential living expenses in highly liquid, principal-safe accounts (high-yield savings, short-term treasury bills) to absorb job loss, medical emergencies, or market downturns without incurring debt.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 21:20</strong>
+              “Precious treasure and oil are in a wise man's dwelling, but a foolish man devours it.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Emergency Fund Burn Rate (EFBR): $\text{EFBR} = \frac{\text{Liquid Emergency Capital}}{\text{Monthly Essential Outflows}} \ge 6 \text{ Months}$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Wise Preservation: Retaining capital reserves within the home rather than consuming every unit received.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 4.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>4.2 Compound Interest & Time Horizon Mechanics</span>
+            <span class="pill">Growth</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Harnessing exponential growth over long time horizons. $A = P(1 + \frac{r}{n})^{nt}$. Early, consistent savings dramatically outperform late, aggressive efforts due to compounding interest.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Galatians 6:9 & Proverbs 13:11</strong>
+              “And let us not grow weary of doing good, for in due season we will reap, if we do not give up.” — Financial compounding requires patience, consistency, and long-term perseverance.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Compounded Capital Multiplier Index (CCMI).</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Patience in Harvest: Respecting the natural law of seed, time, and harvest without seeking instant wealth.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 4.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>4.3 Sinking Funds for Capital Purchases</span>
+            <span class="pill">Planning</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Saving systematically for known future expenses (equipment replacement, house maintenance, tuition, vehicle overhaul) to avoid high-interest consumer credit.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Leviticus 25:20–22</strong>
+              “And if you say, ‘What shall we eat in the seventh year, if we may not sow or gather in our crop?’ I will command my blessing on you in the sixth year, so that it will produce a crop sufficient for three years.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Sinking Fund Readiness Ratio (SFRR) = Saved Capital / Expected Capital Cost.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Anticipatory Provision: Planning ahead for major future requirements so they are fully funded in advance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 4.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>4.4 Opportunity Reserve Capital</span>
+            <span class="pill">Strategy</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Holding a portion of savings specifically for distress sales, market crashes, or sudden high-return business opportunities when capital is scarce.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Matthew 25:8–9</strong>
+              “And the foolish said to the wise, ‘Give us some of your oil, for our lamps are going out.’ But the wise answered, saying, ‘Since there will not be enough for us and for you, go rather to the dealers and buy for yourselves.’”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Dry Powder Capital Ratio = Opportunity Cash / Total Portfolio Assets.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Prepared Liquidity: Maintaining unencumbered reserves to seize value when opportunities arise.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 5 -->
+    <article class="subtopic-card" id="matrix-5">
+      <div class="module-header">
+        <h2>5. BUSINESS & ENTERPRISE DEVELOPMENT</h2>
+        <span class="scripture-badge">Value Creation Key · Proverbs 31:16–18</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Enterprise is the engine of wealth expansion. It transforms innovation, leadership, risk management, and team collaboration into profitable business entities that generate employment and value.
+        </div>
+
+        <!-- Subtopic 5.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>5.1 Customer Acquisition, Lifetime Value & Pricing</span>
+            <span class="pill">Marketing</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Building scalable customer acquisition channels. Calculating Customer Acquisition Cost (CAC) vs. Customer Lifetime Value (LTV). Setting value-based pricing that covers costs while delivering healthy net margins.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 31:18</strong>
+              “She perceives that her merchandise is profitable. Her lamp does not go out at night.” — Understanding profit margins, product value, and persistent operational excellence.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>LTV to CAC Ratio: $\text{LTV:CAC} = \frac{\text{Lifetime Value}}{\text{Acquisition Cost}} \ge 3.0$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Value Perception: Understanding commercial value and maintaining quality goods that earn healthy profits.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 5.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>5.2 Cost Structure, Operations & Profit Margins</span>
+            <span class="pill">Operations</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Managing Fixed Overhead Costs (COGS) vs. Variable Costs. Optimizing gross margins and operating margins ($\text{Operating Income} / \text{Revenue}$). Ensuring clean accounting and financial controls.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 27:26–27</strong>
+              “The lambs will provide your clothing, and the goats the price of a field. There will be enough goats' milk for your food, for the food of your household and maintenance for your girls.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Net Profit Margin Ratio: $\text{NPM} = \frac{\text{Net Income}}{\text{Total Revenue}} \times 100$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Operational Sufficiency: Organizing business operations so that yield comfortably supports all working capital and staff.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 5.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>5.3 Enterprise Scalability & Systems</span>
+            <span class="pill">Scaling</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Documenting Standard Operating Procedures (SOPs), delegating authority, using technology automation, and building management layers so the business operates independent of the founder.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Exodus 18:21–22</strong>
+              “Moreover, look for able men from all the people, men who fear God, who are trustworthy and hate a bribe, and place such men over the people as chiefs of thousands, of hundreds, of fifties, and of tens.” — Jethro’s organizational governance framework.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Founder Dependency Index & Operating System Autonomy Ratio.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Delegated Governance: Structuring management systems with capable, trustworthy leadership.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 5.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>5.4 Ethics, Integrity & Product Quality</span>
+            <span class="pill">Ethics</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Establishing ethical business practices, false advertising prevention, honest contracts, environmental care, and customer satisfaction commitments.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 11:1 & Leviticus 19:35–36</strong>
+              “A false balance is an abomination to the Lord, but a just weight is his delight.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Net Promoter Score (NPS) & Quality Compliance Index.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Absolute Commercial Honesty: Delivering genuine, uncompromised quality and fair pricing in all dealings.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 6 -->
+    <article class="subtopic-card" id="matrix-6">
+      <div class="module-header">
+        <h2>6. INVESTMENT & CAPITAL GROWTH</h2>
+        <span class="scripture-badge">Multiplication Key · Ecclesiastes 11:1–2</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Investing shifts capital from passive holding into active economic productive assets. It unleashes compound returns, beats inflation, and finances long-term expansion through real estate, equities, corporate bonds, and productive ventures.
+        </div>
+
+        <!-- Subtopic 6.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>6.1 Asset Allocation & Portfolio Diversification</span>
+            <span class="pill">Strategy</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Balancing capital across equities, real estate, fixed income, commodities, and cash equivalents according to risk tolerance and time horizon to maximize Sharpe ratio.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Ecclesiastes 11:1–2</strong>
+              “Cast your bread upon the waters, for you will find it after many days. Give a portion to seven, or even to eight, for you know not what disaster may happen on earth.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Portfolio Sharpe Ratio: $\text{Sharpe} = \frac{R_p - R_f}{\sigma_p}$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Multi-Vehicle Diversification: Spreading risk across independent channels to withstand market shocks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 6.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>6.2 Real Estate & Productive Property Acquisition</span>
+            <span class="pill">Tangible Wealth</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Investing in land, commercial real estate, agricultural property, and rental housing. Evaluating capitalization rates ($\text{Cap Rate} = \text{Net Operating Income} / \text{Property Price}$), cash-on-cash return, and long-term land appreciation.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 31:16 & Jeremiah 32:9–12</strong>
+              “She considers a field and buys it; with the fruit of her hands she plants a vineyard.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Real Estate Cap Rate & Net Rental Yield Metric.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Land Acquisition & Cultivation: Securing tangible physical property and making it economically productive.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 6.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>6.3 Capital Markets & Equity Ownership</span>
+            <span class="pill">Equities</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Buying fractional ownership in high-growth, dividend-paying corporations through index funds, exchange-traded funds (ETFs), and value stocks. Harnessing global corporate profits.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Matthew 25:16–17</strong>
+              “He who had received the five talents went at once and traded with them, and he made five talents more. So also he who had the two talents made two talents more.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Return on Equity (ROE) & Dividend Yield Ratio.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Active Trading & Multiplication: Engaging in legitimate commercial market trading to multiply managed resources.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 6.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>6.4 Avoidance of Speculation & High-Risk Schemes</span>
+            <span class="pill">Prudence</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Differentiating between sound investing (based on underlying business fundamentals and cash flow) and get-rich-quick speculation, Ponzi schemes, or unverified high-yield crypto bets.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 28:20 & Proverbs 20:21</strong>
+              “A faithful man will abound with blessings, but whoever hastens to be rich will not go unpunished... An inheritance gained hastily in the beginning will not be blessed in the end.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Speculative Capital Ratio = Highly Volatile Assets / Total Portfolio Assets $\le 5\%$.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Faithful Steadfastness: Rejecting get-rich-quick schemes in favor of steady, legitimate wealth multiplication.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 7 -->
+    <article class="subtopic-card" id="matrix-7">
+      <div class="module-header">
+        <h2>7. DEBT & FINANCIAL PROTECTION</h2>
+        <span class="scripture-badge">Freedom Key · Proverbs 22:7</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Debt can be an economic trap if misused for consumer liabilities, or a controlled leverage tool if used safely for cash-flowing assets. Financial protection uses insurance and risk transfer to insulate wealth from catastrophic failure.
+        </div>
+
+        <!-- Subtopic 7.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>7.1 Consumer Debt Elimination & Mechanics</span>
+            <span class="pill">Elimination</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Eradicating high-interest consumer debt (credit cards, predatory micro-loans, payday loans) using the Debt Avalanche method (mathematically optimal: pay highest interest rate first) or Debt Snowball method (psychologically empowering: pay smallest balance first).</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 22:7</strong>
+              “The rich rules over the poor, and the borrower is the slave of the lender.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Debt-to-Income Ratio (DTI): $\text{DTI} = \frac{\text{Total Monthly Debt Repayments}}{\text{Gross Monthly Income}} \times 100 \le 20\%$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Freedom from Servitude: Systematic removal of debt obligations to preserve personal autonomy and peace.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 7.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>7.2 Strategic Leverage vs. Destructive Borrowing</span>
+            <span class="pill">Leverage</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Analyzing commercial borrowing where the return on invested capital ($\text{ROIC}$) significantly exceeds the cost of debt ($\text{Interest Rate}$), backed by cash-flowing asset security and conservative stress-testing.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: 2 Kings 4:1–7</strong>
+              “Go, borrow vessels at large for yourself from all your neighbors... And she came and told the man of God, and he said, ‘Go, sell the oil and pay your debts, and you and your sons can live on the rest.’” — Elisha instructed the widow to pay her debts first, using business profits to secure her family's freedom.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Debt Service Coverage Ratio (DSCR): $\text{DSCR} = \frac{\text{Net Operating Income}}{\text{Total Debt Service}} \ge 1.25$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Honor Debt Obligations: Ensuring any financial commitment made is repaid in full through productive income.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 7.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>7.3 Insurance & Risk Transfer Instruments</span>
+            <span class="pill">Insurance</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Transferring catastrophic risks to insurance companies through term life insurance, health insurance, property & casualty insurance, liability insurance, and disability protection.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Genesis 41:33–36 & Exodus 22:6</strong>
+              Scriptures acknowledge the reality of accidental fires, crop damage, and disaster, endorsing structured safeguards and restitution frameworks.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Insurance Capital Coverage Adequacy Index.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Risk Transfer & Protection: Insulating loved ones and enterprise assets from unpredictable economic shocks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 7.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>7.4 Avoiding Unwise Suretyship & Guarantees</span>
+            <span class="pill">Caution</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Refusing to co-sign or guarantee third-party loans without absolute willingness and liquid capacity to lose that money without destroying your household stability.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 6:1–5 & Proverbs 17:18</strong>
+              “My son, if you have put up security for your neighbor, have given your pledge for a stranger... deliver yourself like a gazelle from the hand of the hunter, and like a bird from the hand of the fowler.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Co-signed Contingent Liability Index = $0.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Refusal of Unwise Guarantees: Protecting your household by refusing to assume unsecured debt obligations for others.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 8 -->
+    <article class="subtopic-card" id="matrix-8">
+      <div class="module-header">
+        <h2>8. FAMILY & COMMUNITY IMPACT</h2>
+        <span class="scripture-badge">Generosity Key · 1 Timothy 5:8</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Financial growth is empty if isolated from family well-being and community upliftment. True prosperity supports household stability, cares for relatives, creates job opportunities, and invests in societal transformation.
+        </div>
+
+        <!-- Subtopic 8.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>8.1 Household Provision & Care</span>
+            <span class="pill">Family</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Budgeting for comprehensive family welfare: nutritional excellence, mental well-being, quality healthcare, housing stability, and educational funding for children.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: 1 Timothy 5:8</strong>
+              “But if anyone does not provide for his relatives, and especially for members of his household, he has denied the faith and is worse than an unbeliever.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Household Basic Welfare Funding Index $\ge 100\%$.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Primary Domestic Duty: Prioritizing immediate household provision as an essential duty of faith.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 8.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>8.2 Practical Philanthropy & Strategic Almsgiving</span>
+            <span class="pill">Charity</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Setting aside targeted capital for the destitute, widows, orphans, disabled, and economically stranded, empowering them toward self-sufficiency.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 19:17 & James 1:27</strong>
+              “Whoever is generous to the poor lends to the Lord, and he will repay him for his deed.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Community Relief Giving Ratio $\ge 5\% - 10\%$ Net Surplus.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Lending to the Creator: Viewing assistance to the vulnerable as a spiritual investment rewarded by God.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 8.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>8.3 Collaborative Economics & Local Job Creation</span>
+            <span class="pill">Community</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Investing in local business eco-systems, hiring locally, paying fair living wages, and participating in community savings pools or cooperative enterprises.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Leviticus 25:35</strong>
+              “If your brother becomes poor and cannot maintain himself with you, you shall support him as though he were a stranger and a sojourner, that he may live with you.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Jobs Created & Local Economic Reinvestment Index.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Community Economic Capacity: Strengthening local economic security through supportive commercial relationships.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 8.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>8.4 Financial Literacy Mentorship for Youth</span>
+            <span class="pill">Education</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Teaching financial principles, money management, trade skills, and stewardship concepts to children, youth, and community members to break intergenerational poverty cycles.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Deuteronomy 6:6–7 & Proverbs 22:6</strong>
+              “Train up a child in the way he should go; even when he is old he will not depart from it.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Youth Mentorship Hours & Educational Output Ratio.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Generational Knowledge Transfer: Passing wisdom and financial understanding down to upcoming generations.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 9 -->
+    <article class="subtopic-card" id="matrix-9">
+      <div class="module-header">
+        <h2>9. KINGDOM PERSPECTIVE & STEWARDSHIP</h2>
+        <span class="scripture-badge">Alignment Key · Luke 16:10–12</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Kingdom stewardship is the cornerstone of the entire model. It establishes that God is the absolute Owner of all creation, and humans are temporary, accountable managers. Money is an instrument for kingdom expansion, righteousness, and eternal impact.
+        </div>
+
+        <!-- Subtopic 9.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>9.1 Absolute Ownership vs. Responsible Management</span>
+            <span class="pill">Foundation</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Internalizing that you own nothing ultimately; all wealth, energy, breath, and talent belong to God. You are an executive manager (steward) evaluated on how faithfully you align resources with the Owner’s will.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Psalm 24:1 & Deuteronomy 8:17–18</strong>
+              “The earth is the Lord's and the fullness thereof, the world and those who dwell therein... You shall remember the Lord your God, for it is he who gives you power to get wealth.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Stewardship Alignment Score = Self-assessment of managerial integrity.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Divine Ownership Alignment: Operating with full awareness that God owns all capital under your management.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 9.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>9.2 Systematic Firstfruits Giving & Tithes</span>
+            <span class="pill">Giving</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Returning the firstfruits (tithes, offerings) systematically to support spiritual centers, local church ministry, missionary expansion, and kingdom projects before satisfying personal desires.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Malachi 3:10 & Proverbs 3:9–10</strong>
+              “Honor the Lord with your wealth and with the firstfruits of all your produce; then your barns will be filled with plenty, and your vats will be bursting with wine.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Firstfruits Giving Ratio: $\text{FGR} = \frac{\text{Systematic Kingdom Giving}}{\text{Gross Income}} \ge 10\%$</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Firstfruits Priority: Honoring God first with the initial yield of every revenue stream.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 9.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>9.3 Contentment & Elimination of Greed</span>
+            <span class="pill">Heart Guard</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Cultivating internal peace and gratitude while resisting materialism, consumer comparisons, financial envy, and the addictive chase for status symbols.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: 1 Timothy 6:6–10 & Luke 12:15</strong>
+              “But godliness with contentment is great gain... For the love of money is a root of all kinds of evils.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Lifestyle Creep Index = $\frac{\% \text{ Expense Increase}}{\% \text{ Income Increase}} \le 0.5$.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Contentment with Abundance: Maintaining freedom from the love of money while multiplying wealth for purpose.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 9.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>9.4 Eternal Returns & Accountable Stewardship</span>
+            <span class="pill">Audit</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Recognizing that every financial decision carries temporal and eternal consequences. Investing capital into soul winning, righteous causes, justice, and human liberation that yield eternal dividends.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Matthew 6:19–21 & Luke 16:10–11</strong>
+              “Do not lay up for yourselves treasures on earth, where moth and rust destroy and where thieves break in and steal, but lay up for yourselves treasures in heaven... If then you have not been faithful in the unrighteous wealth, who will entrust to you the true riches?”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Kingdom Impact Capital Reinvestment Ratio.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Eternal Audit Preparation: Managing temporal funds so that you receive true spiritual riches and divine approval.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- MODULE 10 -->
+    <article class="subtopic-card" id="matrix-10">
+      <div class="module-header">
+        <h2>10. LONG-TERM PLANNING & LEGACY</h2>
+        <span class="scripture-badge">Generational Key · Proverbs 13:22</span>
+      </div>
+      <div class="module-content">
+        <div class="overview-box">
+          <strong>Module Overview:</strong> Legacy planning ensures that wealth outlives the builder. It combines legal estate structuring, trust creation, multi-generational education, and vision transmission to build enduring multi-generational prosperity.
+        </div>
+
+        <!-- Subtopic 10.1 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>10.1 Estate & Succession Planning</span>
+            <span class="pill">Legal</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Structuring legal wills, family trusts, powers of attorney, healthcare directives, and business succession plans to prevent family disputes, probate delays, and excessive estate taxes.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: 2 Kings 20:1 & Genesis 48:21–22</strong>
+              “Thus says the Lord: ‘Set your house in order, for you shall die and not recover.’” — Clear, proactive estate organization is a divine command.
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Estate Legal Coverage Index (Will, Trust, Power of Attorney fully executed).</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>House Orderliness: Ensuring all legal and asset structures are fully organized prior to departure.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 10.2 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>10.2 Generational Wealth Transmission</span>
+            <span class="pill">Legacy</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Passing down productive assets (real estate, stocks, business equity) rather than just consumer cash to children and grandchildren, backed by financial literacy training.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Proverbs 13:22</strong>
+              “A good man leaves an inheritance to his children's children, but the sinner's wealth is laid up for the righteous.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Generational Wealth Transfer Capital Reserve Ratio.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Two-Generation Inheritance: Building wealth designed to bless grandchildren and future descendants.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 10.3 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>10.3 Family Constitution & Governance</span>
+            <span class="pill">Governance</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Drafting a formal Family Constitution that defines family values, vision, criteria for accessing inheritance, charitable mission goals, and resolution frameworks for family business disputes.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Genesis 18:19</strong>
+              “For I have chosen him, that he may command his children and his household after him to keep the way of the Lord by doing righteousness and justice...”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Family Governance Completion Index.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Covenant Values Transmission: Establishing explicit behavioral, spiritual, and financial standards across generations.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subtopic 10.4 -->
+        <div class="subtopic-card">
+          <div class="subtopic-title">
+            <span>10.4 Kingdom Endowments & Perpetual Foundations</span>
+            <span class="pill">Perpetual Impact</span>
+          </div>
+          <div class="subtopic-body">
+            <p><strong>Detailed Concept:</strong> Establishing donor-advised funds (DAFs), private charitable foundations, or kingdom endowments that distribute ongoing interest and yields to advance gospel projects, end poverty, and support strategic initiatives in perpetuity.</p>
+            <div class="scripture-box">
+              <strong>Scriptural Anchor: Psalm 112:5–9</strong>
+              “It is well with the man who deals generously and lends; who conducts his affairs with justice... He has distributed freely; he has given to the poor; his righteousness endures forever; his horn is exalted in honor.”
+            </div>
+            <div class="indicator-grid">
+              <div class="indicator-box">
+                <h5>Modern Financial Indicator</h5>
+                <p>Perpetual Endowment Capital Allocation Value.</p>
+              </div>
+              <div class="indicator-box">
+                <h5>Kingdom Principle</h5>
+                <p>Enduring Righteous Impact: Creating financial engines whose charitable yield outlasts human lifetime.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- SECTION 3: GROWTH PATTERN & IMPACT MATRIX -->
+  <section id="growth-pattern">
+    <div class="section-title">
+      <span class="num">3</span>
+      <span>Financial Growth Pattern, Parameters & Impact Matrix</span>
+    </div>
+
+    <div class="card">
+      <h2>The 4-Stage Kingdom Growth Pattern</h2>
+      <p>Financial growth follows a predictable development path. Moving from one stage to the next requires mastering specific operational skills and applying key scriptural principles.</p>
+
+      <table class="growth-matrix-table">
+        <thead>
+          <tr>
+            <th>Growth Stage</th>
+            <th>Primary Focus</th>
+            <th>Key Parameters & Metrics</th>
+            <th>Scriptural Milestone</th>
+            <th>Required Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Stage 1: Survival & Foundation</strong></td>
+            <td>Financial Literacy, Expense Control, Debt Elimination</td>
+            <td>
+              • Income > Expenses<br>
+              • DTI $\le 20\%$<br>
+              • 1-Month Reserve
+            </td>
+            <td>Luke 14:28<br><em>Counting the Cost</em></td>
+            <td>Build budget, stop debt accumulation, acquire fundamental literacy.</td>
+          </tr>
+          <tr>
+            <td><strong>Stage 2: Stability & Growth</strong></td>
+            <td>Skill Monetization, Emergency Fund, Firstfruits Giving</td>
+            <td>
+              • 6-Month Emergency Liquidity<br>
+              • MSR $\ge 20\%$<br>
+              • Tithe/Firstfruits $\ge 10\%$
+            </td>
+            <td>Proverbs 21:20<br><em>Precious Treasure Saved</em></td>
+            <td>Expand income streams, automate monthly savings, institute systematic giving.</td>
+          </tr>
+          <tr>
+            <td><strong>Stage 3: Enterprise & Multiplication</strong></td>
+            <td>Business Development, Asset Investments, Real Estate</td>
+            <td>
+              • Passive Income $\ge 50\%$ Expenses<br>
+              • Cap Rate $\ge 8\%$<br>
+              • ROE $\ge 15\%$
+            </td>
+            <td>Matthew 25:16<br><em>Talents Multiplied</em></td>
+            <td>Build scalable business operations, invest in equities/real estate, diversify investments.</td>
+          </tr>
+          <tr>
+            <td><strong>Stage 4: Legacy & Kingdom Impact</strong></td>
+            <td>Estate Trust, Family Governance, Kingdom Endowments</td>
+            <td>
+              • Passive Income > 100% Living Costs<br>
+              • Executed Will/Trust<br>
+              • Endowment Fund Operating
+            </td>
+            <td>Proverbs 13:22<br><em>Grandchildren's Inheritance</em></td>
+            <td>Draft family constitution, set up estate trusts, fund perpetual charitable endowments.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    </section>
+
+
+    </section>
+  </div>
+
+  <!-- VIEW 3: USER REPORT DASHBOARD -->
+  <div id="userReportDashboard" class="hidden">
+    <div id="reportPrintArea">
+      <div class="panel" style="margin-bottom:16px; background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff;">
+        <h2 style="color:var(--gold2)">Official Financial Matrix Report</h2>
+        <p class="sub" style="color:#dce9f0">Detailed Analysis, Charts, Scriptural Stewardship, & Monthly Historical Record</p>
+        <div id="reportSummaryHeader" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-top:12px;font-size:13px"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:16px;margin-bottom:16px">
+        <section class="panel">
+          <h2>10-Key Matrix Performance (Radar Chart)</h2>
+          <div style="position:relative;height:280px;width:100%"><canvas id="matrixRadarChart"></canvas></div>
+        </section>
+        <section class="panel">
+          <h2>Financial Health & Wealth Distribution (Pie Chart)</h2>
+          <div style="position:relative;height:280px;width:100%"><canvas id="healthPieChart"></canvas></div>
+        </section>
+      </div>
+
+      <div class="panel" style="margin-bottom:16px">
+        <h2>Monthly Historical Matrix Records</h2>
+        <div style="max-height:180px;overflow-y:auto">
+          <table class="history-table">
+            <thead><tr><th>Month</th><th>Health Score</th><th>Knowledge Average</th><th>Overall Readiness</th></tr></thead>
+            <tbody id="historyTableBody"><tr><td colspan="4" style="text-align:center;color:var(--muted)">No saved records yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>6. Personalized Action Plan & Next Steps</h2>
+        <div id="reportRecommendations" class="steps"></div>
+      </div>
+    </div>
+
+    <div class="btnrow" style="margin-top:16px">
+      <button class="btn gold" id="exportPdfBtn">Export as PDF</button>
+      <button class="btn outline" id="printReportBtn">Print Report</button>
+    </div>
+    <p id="exportMessage" class="smallmuted" aria-live="polite" style="margin-top:8px"></p>
+  </div>
+</main>
+
+<section class="footer" style="max-width:1500px;margin:16px auto;padding:15px 4%">
+  <div><strong>Know yourself</strong><span>Discover potential</span></div><div><strong>Set purpose</strong><span>Choose direction</span></div><div><strong>Build skills</strong><span>Develop competence</span></div><div><strong>Manage money</strong><span>Use it wisely</span></div><div><strong>Serve others</strong><span>Create value</span></div><div><strong>Stay accountable</strong><span>Track and improve</span></div>
+</section>
+<p class="smallmuted" style="text-align:center;margin-bottom:20px">Financial Matrix System · Educational planning tool. Scores are illustrative and based on user-entered information. This is not regulated financial, investment, tax or legal advice.</p>
+
+<script>
+"use strict";
+
+// Complete Modules database ensuring 100% template alignment and zero omissions
+const modules = [
+  {
+    key: "literacy", title: "1. Financial literacy", desc: "Money, budgeting, assets, liabilities and risk", target: 90, score: 50, scripture: "Luke 14:28 - 'For which of you, desiring to build a tower, does not first sit down and count the cost...'",
+    overview: "Financial literacy is the cognitive foundation of economic freedom. It encompasses the ability to comprehend financial systems, track monetary units, evaluate economic risks, and distinguish between income-generating assets and wealth-draining liabilities.",
+    subtopics: [
+      {
+        name: "1.1 Money & Medium of Exchange", score: 50,
+        concept: "Understanding money not as a physical artifact, but as a standardized claim on human labor, time, and value. Money functions as a store of value, unit of account, and medium of trade. Modern currency systems rely on fiat value, monetary policy, and interest rate structures.",
+        scriptureRef: "Genesis 41:56–57 & Genesis 23:15–16",
+        scriptureText: "“So Abraham listened to Ephron, and Abraham weighed out for Ephron the silver that he had named in the hearing of the Hittites, four hundred shekels of silver, according to the weights current among the merchants.” — Scripture emphasizes fair weights, precise measurement, and clear mediums of trade in economic transactions.",
+        indicator: "Inflation Adjusted Purchasing Power Ratio: Pa = Pn / (1 + i)^t",
+        principle: "Monetary Integrity & Honesty: Maintaining accurate accounts free of fraud or currency devaluation deceit (Leviticus 19:35-36)."
+      },
+      {
+        name: "1.2 Budgeting & Cost Architecture", score: 50,
+        concept: "The science of mapping income inflows against fixed, variable, and discretionary outflows. A budget is a proactive financial roadmap that forces money to obey strategic priorities rather than reactive spending impulses.",
+        scriptureRef: "Luke 14:28–30",
+        scriptureText: "“For which of you, desiring to build a tower, does not first sit down and count the cost, whether he has enough to complete it? Otherwise, when he has laid a foundation and is not able to finish, all who see it begin to mock him...”",
+        indicator: "Budget Variance Index (BVI): BVI = (Actual Expenses - Budgeted Expenses) / Budgeted Expenses * 100",
+        principle: "Diligent Counting: Proactive planning and deliberate resource allocation prior to capital commitment."
+      },
+      {
+        name: "1.3 Assets vs. Liabilities Distinction", score: 50,
+        concept: "An asset is any property or instrument that puts net cash into your pocket (positive cash flow or capital growth). A liability is anything that pulls cash out of your pocket. True financial strength requires expanding income-producing assets while minimizing non-performing liabilities.",
+        scriptureRef: "Proverbs 24:27",
+        scriptureText: "“Prepare your work outside; get everything ready for yourself in the field, and after that build your house.” — Prioritize establishing income-producing assets (the agricultural field) before spending on consumer liabilities (the personal house).",
+        indicator: "Asset-to-Liability Ratio: ALR = Total Income-Producing Assets / Total Consumer Liabilities",
+        principle: "Order of Enterprise: Capital must be deployed into productive wealth-generating vehicles prior to personal consumption."
+      },
+      {
+        name: "1.4 Risk Management & Economic Exposure", score: 50,
+        concept: "Assessing downside risks including inflation, market volatility, sickness, currency devaluation, and operational disruptions. Includes constructing risk mitigation strategies such as hedging, emergency liquidity, and insurance protection.",
+        scriptureRef: "Proverbs 22:3",
+        scriptureText: "“The prudent sees danger and hides himself, but the simple go on and suffer for it.”",
+        indicator: "Downside Risk Exposure Index & Coverage Ratio",
+        principle: "Prudent Foresight: Anticipating systemic disruptions and creating protective financial buffers."
+      }
+    ]
+  },
+  {
+    key: "income", title: "2. Income & earning power", desc: "Skills, employment, services and income generation", target: 90, score: 50, scripture: "Proverbs 22:29 - 'Do you see a man skillful in his work? He will stand before kings...'",
+    overview: "Earning power represents the rate at which human potential is converted into economic revenue through specialized skills, market solutions, employment excellence, and entrepreneurial value creation.",
+    subtopics: [
+      {
+        name: "2.1 Skill Monetization & Market Value", score: 50,
+        concept: "The market compensates individuals based on the perceived value, rarity, and difficulty of replacing their skills. Transforming raw talent into high-value expertise commands premium market positioning.",
+        scriptureRef: "Proverbs 22:29",
+        scriptureText: "“Do you see a man skillful in his work? He will stand before kings; he will not stand before obscure men.”",
+        indicator: "Hourly Earning Velocity (HEV): HEV = Net Income / Total Hours Worked",
+        principle: "Vocational Diligence: Developing exceptional skill and mastery that commands honor and market premium."
+      },
+      {
+        name: "2.2 Active vs. Passive vs. Portfolio Streams", score: 50,
+        concept: "Transitioning from linear active income (trading hours for money) to leveraged passive income (business systems, intellectual property) and portfolio income (dividends, interest, capital gains).",
+        scriptureRef: "Ecclesiastes 11:2",
+        scriptureText: "“Give a portion to seven, or even to eight, for you know not what disaster may happen on earth.”",
+        indicator: "Passive Income Ratio: PIR = (Passive + Portfolio Income) / Total Monthly Living Expenses * 100",
+        principle: "Diversified Provision: Establishing multiple channels of income to safeguard against localized failures."
+      },
+      {
+        name: "2.3 Value Proposition & Problem Solving", score: 50,
+        concept: "Wealth is a byproduct of solving human problems. The greater the complexity and magnitude of the problem solved, the higher the financial compensation generated.",
+        scriptureRef: "Genesis 41:38–41",
+        scriptureText: "“And Pharaoh said to his servants, ‘Can we find a man like this, in whom is the Spirit of God?’... You shall be over my house, and all my people shall order themselves as you command.” — Joseph solved a national famine crisis and was elevated to supreme economic authority.",
+        indicator: "Economic Surplus Delivered per Client/Employer",
+        principle: "Servant Leadership in Market: Generating wealth by providing profound solutions to societal needs."
+      },
+      {
+        name: "2.4 Negotiation & Compensation Equity", score: 50,
+        concept: "Articulating value, securing fair market rates, structuring performance bonuses, and ensuring equity in employment or contractual agreements.",
+        scriptureRef: "Jeremiah 22:13 & Colossians 4:1",
+        scriptureText: "“Woe to him who builds his house by unrighteousness... who uses his neighbor's service without wages and gives him nothing for his work.”",
+        indicator: "Compensation-to-Value Realization Ratio",
+        principle: "Fair Wage Equity: Demanding and giving honest, righteous compensation for labor delivered."
+      }
+    ]
+  },
+  {
+    key: "budget", title: "3. Budget & cash flow", desc: "Track income, expenses, needs and wants", target: 85, score: 50, scripture: "Proverbs 21:5 - 'The plans of the diligent lead surely to abundance, but everyone who is hasty comes only to poverty.'",
+    overview: "Cash flow management is the heartbeat of solvency. Mastering inflows and outflows prevents economic hemorrhaging, creates investment surpluses, and maintains liquidity.",
+    subtopics: [
+      {
+        name: "3.1 Needs vs. Wants Allocation Architecture", score: 50,
+        concept: "Categorizing cash outflows into survival necessities (housing, food, health), productivity investments (education, business tools), and discretionary luxury wants. Employs frameworks like the 50/30/20 rule or Kingdom 10/10/80 model (10% Giving, 10% Capital Savings, 80% Living).",
+        scriptureRef: "Isaiah 55:2",
+        scriptureText: "“Why do you spend your money for that which is not bread, and your labor for that which does not satisfy?”",
+        indicator: "Essential Expense Ratio: EER = Fixed Essential Expenses / Total Net Income * 100 <= 50%",
+        principle: "Disciplined Consumption: Exercising temperance and avoiding wasteful expenditure on non-essentials."
+      },
+      {
+        name: "3.2 Real-Time Cash Flow Tracking", score: 50,
+        concept: "Implementing real-time tracking systems (digital ledgers, accounting software, mobile apps) to log every income and expense transaction, preventing micro-leakages.",
+        scriptureRef: "Proverbs 27:23",
+        scriptureText: "“Know well the condition of your flocks, and give attention to your herds.” — The modern flock is your bank account, digital wallets, receivables, and ledger balances.",
+        indicator: "Ledger Accuracy Rate & Daily Cash Leakage Metric",
+        principle: "Vigilant Oversight: Maintaining precise operational awareness of all managed resources."
+      },
+      {
+        name: "3.3 Net Surplus Generation", score: 50,
+        concept: "Widening the gap between income and expenses to guarantee a monthly positive cash flow surplus. A financial plan without surplus is stagnant and vulnerable.",
+        scriptureRef: "Proverbs 13:11",
+        scriptureText: "“Wealth gained hastily will dwindle, but whoever gathers little by little will increase it.”",
+        indicator: "Monthly Savings Rate (MSR): MSR = Total Net Monthly Surplus / Total Gross Monthly Income * 100 >= 20%",
+        principle: "Incremental Accumulation: Consistently preserving surplus capital over time through steady discipline."
+      },
+      {
+        name: "3.4 Cash Flow Smoothing for Irregular Incomes", score: 50,
+        concept: "Managing seasonal, commission, or business profits by establishing a 'holding tank' account. Paying yourself a baseline salary during high-earning months to survive low-earning months.",
+        scriptureRef: "Genesis 41:34–36",
+        scriptureText: "“Let Pharaoh appoint overseers over the land and take one-fifth of the produce of the land of Egypt during the seven plentiful years... That food shall be a reserve for the land against the seven years of famine.”",
+        indicator: "Buffer Tank Index (BTI) = Months of Baseline Payroll Saved",
+        principle: "Seasonal Management: Storing surplus during seasons of abundance to navigate seasons of scarcity."
+      }
+    ]
+  },
+  {
+    key: "saving", title: "4. Saving & emergency fund", desc: "Reserves, goals and financial discipline", target: 85, score: 50, scripture: "Proverbs 21:20 - 'Precious treasure and oil are in a wise man's dwelling, but a foolish man devours it.'",
+    overview: "Saving is the defensive perimeter of personal finance. It provides liquidity, protects against unexpected shocks, and provides seed capital for future growth opportunities.",
+    subtopics: [
+      {
+        name: "4.1 Emergency Reserve Liquidity", score: 50,
+        concept: "Amassing 3 to 12 months of essential living expenses in highly liquid, principal-safe accounts (high-yield savings, short-term treasury bills) to absorb job loss, medical emergencies, or market downturns without incurring debt.",
+        scriptureRef: "Proverbs 21:20",
+        scriptureText: "“Precious treasure and oil are in a wise man's dwelling, but a foolish man devours it.”",
+        indicator: "Emergency Fund Burn Rate (EFBR): EFBR = Liquid Emergency Capital / Monthly Essential Outflows >= 6 Months",
+        principle: "Wise Preservation: Retaining capital reserves within the home rather than consuming every unit received."
+      },
+      {
+        name: "4.2 Compound Interest & Time Horizon Mechanics", score: 50,
+        concept: "Harnessing exponential growth over long time horizons. A = P(1 + r/n)^nt. Early, consistent savings dramatically outperform late, aggressive efforts due to compounding interest.",
+        scriptureRef: "Galatians 6:9 & Proverbs 13:11",
+        scriptureText: "“And let us not grow weary of doing good, for in due season we will reap, if we do not give up.” — Financial compounding requires patience, consistency, and long-term perseverance.",
+        indicator: "Compounded Capital Multiplier Index (CCMI)",
+        principle: "Patience in Harvest: Respecting the natural law of seed, time, and harvest without seeking instant wealth."
+      },
+      {
+        name: "4.3 Sinking Funds for Capital Purchases", score: 50,
+        concept: "Saving systematically for known future expenses (equipment replacement, house maintenance, tuition, vehicle overhaul) to avoid high-interest consumer credit.",
+        scriptureRef: "Leviticus 25:20–22",
+        scriptureText: "“And if you say, ‘What shall we eat in the seventh year, if we may not sow or gather in our crop?’ I will command my blessing on you in the sixth year, so that it will produce a crop sufficient for three years.”",
+        indicator: "Sinking Fund Readiness Ratio (SFRR) = Saved Capital / Expected Capital Cost",
+        principle: "Anticipatory Provision: Planning ahead for major future requirements so they are fully funded in advance."
+      },
+      {
+        name: "4.4 Opportunity Reserve Capital", score: 50,
+        concept: "Holding a portion of savings specifically for distress sales, market crashes, or sudden high-return business opportunities when capital is scarce.",
+        scriptureRef: "Matthew 25:8–9",
+        scriptureText: "“And the foolish said to the wise, ‘Give us some of your oil, for our lamps are going out.’ But the wise answered, saying, ‘Since there will not be enough for us and for you, go rather to the dealers and buy for yourselves.’”",
+        indicator: "Dry Powder Capital Ratio = Opportunity Cash / Total Portfolio Assets",
+        principle: "Prepared Liquidity: Maintaining unencumbered reserves to seize value when opportunities arise."
+      }
+    ]
+  },
+  {
+    key: "business", title: "5. Business & enterprise", desc: "Customers, costs, pricing, revenue and profit", target: 85, score: 50, scripture: "Proverbs 31:16-18 - 'She considers a field and buys it; with the fruit of her hands she plants a vineyard...'",
+    overview: "Enterprise is the engine of wealth expansion. It transforms innovation, leadership, risk management, and team collaboration into profitable business entities that generate employment and value.",
+    subtopics: [
+      {
+        name: "5.1 Customer Acquisition, Lifetime Value & Pricing", score: 50,
+        concept: "Building scalable customer acquisition channels. Calculating Customer Acquisition Cost (CAC) vs. Customer Lifetime Value (LTV). Setting value-based pricing that covers costs while delivering healthy net margins.",
+        scriptureRef: "Proverbs 31:18",
+        scriptureText: "“She perceives that her merchandise is profitable. Her lamp does not go out at night.” — Understanding profit margins, product value, and persistent operational excellence.",
+        indicator: "LTV to CAC Ratio: LTV:CAC = Lifetime Value / Acquisition Cost >= 3.0",
+        principle: "Value Perception: Understanding commercial value and maintaining quality goods that earn healthy profits."
+      },
+      {
+        name: "5.2 Cost Structure, Operations & Profit Margins", score: 50,
+        concept: "Managing Fixed Overhead Costs (COGS) vs. Variable Costs. Optimizing gross margins and operating margins (Operating Income / Revenue). Ensuring clean accounting and financial controls.",
+        scriptureRef: "Proverbs 27:26–27",
+        scriptureText: "“The lambs will provide your clothing, and the goats the price of a field. There will be enough goats' milk for your food, for the food of your household and maintenance for your girls.”",
+        indicator: "Net Profit Margin Ratio: NPM = Net Income / Total Revenue * 100",
+        principle: "Operational Sufficiency: Organizing business operations so that yield comfortably supports all working capital and staff."
+      },
+      {
+        name: "5.3 Enterprise Scalability & Systems", score: 50,
+        concept: "Documenting Standard Operating Procedures (SOPs), delegating authority, using technology automation, and building management layers so the business operates independent of the founder.",
+        scriptureRef: "Exodus 18:21–22",
+        scriptureText: "“Moreover, look for able men from all the people, men who fear God, who are trustworthy and hate a bribe, and place such men over the people as chiefs of thousands, of hundreds, of fifties, and of tens.” — Jethro’s organizational governance framework.",
+        indicator: "Founder Dependency Index & Operating System Autonomy Ratio",
+        principle: "Delegated Governance: Structuring management systems with capable, trustworthy leadership."
+      },
+      {
+        name: "5.4 Ethics, Integrity & Product Quality", score: 50,
+        concept: "Establishing ethical business practices, false advertising prevention, honest contracts, environmental care, and customer satisfaction commitments.",
+        scriptureRef: "Proverbs 11:1 & Leviticus 19:35–36",
+        scriptureText: "“A false balance is an abomination to the Lord, but a just weight is his delight.”",
+        indicator: "Net Promoter Score (NPS) & Quality Compliance Index",
+        principle: "Absolute Commercial Honesty: Delivering genuine, uncompromised quality and fair pricing in all dealings."
+      }
+    ]
+  },
+  {
+    key: "investment", title: "6. Investment & growth", desc: "Risk, diversification and long-term returns", target: 80, score: 30, scripture: "Ecclesiastes 11:1-2 - 'Cast your bread upon the waters, for you will find it after many days. Give a portion to seven, or even to eight...'",
+    overview: "Investing shifts capital from passive holding into active economic productive assets. It unleashes compound returns, beats inflation, and finances long-term expansion through real estate, equities, corporate bonds, and productive ventures.",
+    subtopics: [
+      {
+        name: "6.1 Asset Allocation & Portfolio Diversification", score: 30,
+        concept: "Balancing capital across equities, real estate, fixed income, commodities, and cash equivalents according to risk tolerance and time horizon to maximize Sharpe ratio.",
+        scriptureRef: "Ecclesiastes 11:1–2",
+        scriptureText: "“Cast your bread upon the waters, for you will find it after many days. Give a portion to seven, or even to eight, for you know not what disaster may happen on earth.”",
+        indicator: "Portfolio Sharpe Ratio: Sharpe = (Rp - Rf) / σp",
+        principle: "Multi-Vehicle Diversification: Spreading risk across independent channels to withstand market shocks."
+      },
+      {
+        name: "6.2 Real Estate & Productive Property Acquisition", score: 30,
+        concept: "Investing in land, commercial real estate, agricultural property, and rental housing. Evaluating capitalization rates (Cap Rate = Net Operating Income / Property Price), cash-on-cash return, and long-term land appreciation.",
+        scriptureRef: "Proverbs 31:16 & Jeremiah 32:9–12",
+        scriptureText: "“She considers a field and buys it; with the fruit of her hands she plants a vineyard.”",
+        indicator: "Real Estate Cap Rate & Net Rental Yield Metric",
+        principle: "Land Acquisition & Cultivation: Securing tangible physical property and making it economically productive."
+      },
+      {
+        name: "6.3 Capital Markets & Equity Ownership", score: 30,
+        concept: "Buying fractional ownership in high-growth, dividend-paying corporations through index funds, exchange-traded funds (ETFs), and value stocks. Harnessing global corporate profits.",
+        scriptureRef: "Matthew 25:16–17",
+        scriptureText: "“He who had received the five talents went at once and traded with them, and he made five talents more. So also he who had the two talents made two talents more.”",
+        indicator: "Return on Equity (ROE) & Dividend Yield Ratio",
+        principle: "Active Trading & Multiplication: Engaging in legitimate commercial market trading to multiply managed resources."
+      },
+      {
+        name: "6.4 Avoidance of Speculation & High-Risk Schemes", score: 30,
+        concept: "Differentiating between sound investing (based on underlying business fundamentals and cash flow) and get-rich-quick speculation, Ponzi schemes, or unverified high-yield crypto bets.",
+        scriptureRef: "Proverbs 28:20 & Proverbs 20:21",
+        scriptureText: "“A faithful man will abound with blessings, but whoever hastens to be rich will not go unpunished... An inheritance gained hastily in the beginning will not be blessed in the end.”",
+        indicator: "Speculative Capital Ratio = Highly Volatile Assets / Total Portfolio Assets <= 5%.",
+        principle: "Faithful Steadfastness: Rejecting get-rich-quick schemes in favor of steady, legitimate wealth multiplication."
+      }
+    ]
+  },
+  {
+    key: "debt", title: "7. Debt & financial protection", desc: "Borrowing costs, repayment and risk protection", target: 85, score: 50, scripture: "Proverbs 22:7 - 'The rich rules over the poor, and the borrower is the slave of the lender.'",
+    overview: "Debt can be an economic trap if misused for consumer liabilities, or a controlled leverage tool if used safely for cash-flowing assets. Financial protection uses insurance and risk transfer to insulate wealth from catastrophic failure.",
+    subtopics: [
+      {
+        name: "7.1 Consumer Debt Elimination & Mechanics", score: 50,
+        concept: "Eradicating high-interest consumer debt (credit cards, predatory micro-loans, payday loans) using the Debt Avalanche method (mathematically optimal: pay highest interest rate first) or Debt Snowball method (psychologically empowering: pay smallest balance first).",
+        scriptureRef: "Proverbs 22:7",
+        scriptureText: "“The rich rules over the poor, and the borrower is the slave of the lender.”",
+        indicator: "Debt-to-Income Ratio (DTI): DTI = Total Monthly Debt Repayments / Gross Monthly Income * 100 <= 20%",
+        principle: "Freedom from Servitude: Systematic removal of debt obligations to preserve personal autonomy and peace."
+      },
+      {
+        name: "7.2 Strategic Leverage vs. Destructive Borrowing", score: 50,
+        concept: "Analyzing commercial borrowing where the return on invested capital (ROIC) significantly exceeds the cost of debt (Interest Rate), backed by cash-flowing asset security and conservative stress-testing.",
+        scriptureRef: "2 Kings 4:1–7",
+        scriptureText: "“Go, borrow vessels at large for yourself from all your neighbors... And she came and told the man of God, and he said, ‘Go, sell the oil and pay your debts, and you and your sons can live on the rest.’” — Elisha instructed the widow to pay her debts first, using business profits to secure her family's freedom.",
+        indicator: "Debt Service Coverage Ratio (DSCR): DSCR = Net Operating Income / Total Debt Service >= 1.25",
+        principle: "Honor Debt Obligations: Ensuring any financial commitment made is repaid in full through productive income."
+      },
+      {
+        name: "7.3 Insurance & Risk Transfer Instruments", score: 50,
+        concept: "Transferring catastrophic risks to insurance companies through term life insurance, health insurance, property & casualty insurance, liability insurance, and disability protection.",
+        scriptureRef: "Genesis 41:33–36 & Exodus 22:6",
+        scriptureText: "Scriptures acknowledge the reality of accidental fires, crop damage, and disaster, endorsing structured safeguards and restitution frameworks.",
+        indicator: "Insurance Capital Coverage Adequacy Index",
+        principle: "Risk Transfer & Protection: Insulating loved ones and enterprise assets from unpredictable economic shocks."
+      },
+      {
+        name: "7.4 Avoiding Unwise Suretyship & Guarantees", score: 50,
+        concept: "Refusing to co-sign or guarantee third-party loans without absolute willingness and liquid capacity to lose that money without destroying your household stability.",
+        scriptureRef: "Proverbs 6:1–5 & Proverbs 17:18",
+        scriptureText: "“My son, if you have put up security for your neighbor, have given your pledge for a stranger... deliver yourself like a gazelle from the hand of the hunter, and like a bird from the hand of the fowler.”",
+        indicator: "Co-signed Contingent Liability Index = 0.",
+        principle: "Refusal of Unwise Guarantees: Protecting your household by refusing to assume unsecured debt obligations for others."
+      }
+    ]
+  },
+  {
+    key: "family", title: "8. Family & community", desc: "Responsibilities, generosity and community impact", target: 90, score: 60, scripture: "1 Timothy 5:8 - 'But if anyone does not provide for his relatives, and especially for members of his household, he has denied the faith...'",
+    overview: "Financial growth is empty if isolated from family well-being and community upliftment. True prosperity supports household stability, cares for relatives, creates job opportunities, and invests in societal transformation.",
+    subtopics: [
+      {
+        name: "8.1 Household Provision & Care", score: 60,
+        concept: "Budgeting for comprehensive family welfare: nutritional excellence, mental well-being, quality healthcare, housing stability, and educational funding for children.",
+        scriptureRef: "1 Timothy 5:8",
+        scriptureText: "“But if anyone does not provide for his relatives, and especially for members of his household, he has denied the faith and is worse than an unbeliever.”",
+        indicator: "Household Basic Welfare Funding Index >= 100%.",
+        principle: "Primary Domestic Duty: Prioritizing immediate household provision as an essential duty of faith."
+      },
+      {
+        name: "8.2 Practical Philanthropy & Strategic Almsgiving", score: 60,
+        concept: "Setting aside targeted capital for the destitute, widows, orphans, disabled, and economically stranded, empowering them toward self-sufficiency.",
+        scriptureRef: "Proverbs 19:17 & James 1:27",
+        scriptureText: "“Whoever is generous to the poor lends to the Lord, and he will repay him for his deed.”",
+        indicator: "Community Relief Giving Ratio >= 5% - 10% Net Surplus.",
+        principle: "Lending to the Creator: Viewing assistance to the vulnerable as a spiritual investment rewarded by God."
+      },
+      {
+        name: "8.3 Collaborative Economics & Local Job Creation", score: 60,
+        concept: "Investing in local business eco-systems, hiring locally, paying fair living wages, and participating in community savings pools or cooperative enterprises.",
+        scriptureRef: "Leviticus 25:35",
+        scriptureText: "“If your brother becomes poor and cannot maintain himself with you, you shall support him as though he were a stranger and a sojourner, that he may live with you.”",
+        indicator: "Jobs Created & Local Economic Reinvestment Index",
+        principle: "Community Economic Capacity: Strengthening local economic security through supportive commercial relationships."
+      },
+      {
+        name: "8.4 Financial Literacy Mentorship for Youth", score: 60,
+        concept: "Teaching financial principles, money management, trade skills, and stewardship concepts to children, youth, and community members to break intergenerational poverty cycles.",
+        scriptureRef: "Deuteronomy 6:6–7 & Proverbs 22:6",
+        scriptureText: "“Train up a child in the way he should go; even when he is old he will not depart from it.”",
+        indicator: "Youth Mentorship Hours & Educational Output Ratio",
+        principle: "Generational Knowledge Transfer: Passing wisdom and financial understanding down to upcoming generations."
+      }
+    ]
+  },
+  {
+    key: "kingdom", title: "9. Kingdom stewardship", desc: "Integrity, diligence, generosity and accountability", target: 95, score: 60, scripture: "Luke 16:10-12 - 'One who is faithful in a very little is also faithful in much...'",
+    overview: "Kingdom stewardship is the cornerstone of the entire model. It establishes that God is the absolute Owner of all creation, and humans are temporary, accountable managers. Money is an instrument for kingdom expansion, righteousness, and eternal impact.",
+    subtopics: [
+      {
+        name: "9.1 Absolute Ownership vs. Responsible Management", score: 60,
+        concept: "Internalizing that you own nothing ultimately; all wealth, energy, breath, and talent belong to God. You are an executive manager (steward) evaluated on how faithfully you align resources with the Owner’s will.",
+        scriptureRef: "Psalm 24:1 & Deuteronomy 8:17–18",
+        scriptureText: "“The earth is the Lord's and the fullness thereof, the world and those who dwell therein... You shall remember the Lord your God, for it is he who gives you power to get wealth.”",
+        indicator: "Stewardship Alignment Score = Self-assessment of managerial integrity.",
+        principle: "Divine Ownership Alignment: Operating with full awareness that God owns all capital under your management."
+      },
+      {
+        name: "9.2 Systematic Firstfruits Giving & Tithes", score: 60,
+        concept: "Returning the firstfruits (tithes, offerings) systematically to support spiritual centers, local church ministry, missionary expansion, and kingdom projects before satisfying personal desires.",
+        scriptureRef: "Malachi 3:10 & Proverbs 3:9–10",
+        scriptureText: "“Honor the Lord with your wealth and with the firstfruits of all your produce; then your barns will be filled with plenty, and your vats will be bursting with wine.”",
+        indicator: "Firstfruits Giving Ratio: FGR = Systematic Kingdom Giving / Gross Income >= 10%",
+        principle: "Firstfruits Priority: Honoring God first with the initial yield of every revenue stream."
+      },
+      {
+        name: "9.3 Contentment & Elimination of Greed", score: 60,
+        concept: "Cultivating internal peace and gratitude while resisting materialism, consumer comparisons, financial envy, and the addictive chase for status symbols.",
+        scriptureRef: "1 Timothy 6:6–10 & Luke 12:15",
+        scriptureText: "“But godliness with contentment is great gain... For the love of money is a root of all kinds of evils.”",
+        indicator: "Lifestyle Creep Index = (% Expense Increase) / (% Income Increase) <= 0.5.",
+        principle: "Contentment with Abundance: Maintaining freedom from the love of money while multiplying wealth for purpose."
+      },
+      {
+        name: "9.4 Eternal Returns & Accountable Stewardship", score: 60,
+        concept: "Recognizing that every financial decision carries temporal and eternal consequences. Investing capital into soul winning, righteous causes, justice, and human liberation that yield eternal dividends.",
+        scriptureRef: "Matthew 6:19–21 & Luke 16:10–11",
+        scriptureText: "“Do not lay up for yourselves treasures on earth, where moth and rust destroy and where thieves break in and steal, but lay up for yourselves treasures in heaven... If then you have not been faithful in the unrighteous wealth, who will entrust to you the true riches?”",
+        indicator: "Kingdom Impact Capital Reinvestment Ratio",
+        principle: "Eternal Audit Preparation: Managing temporal funds so that you receive true spiritual riches and divine approval."
+      }
+    ]
+  },
+  {
+    key: "planning", title: "10. Long-term planning", desc: "Goals, legacy and future provision", target: 90, score: 40, scripture: "Proverbs 13:22 - 'A good man leaves an inheritance to his children's children...'",
+    overview: "Legacy planning ensures that wealth outlives the builder. It combines legal estate structuring, trust creation, multi-generational education, and vision transmission to build enduring multi-generational prosperity.",
+    subtopics: [
+      {
+        name: "10.1 Estate & Succession Planning", score: 40,
+        concept: "Structuring legal wills, family trusts, powers of attorney, healthcare directives, and business succession plans to prevent family disputes, probate delays, and excessive estate taxes.",
+        scriptureRef: "2 Kings 20:1 & Genesis 48:21–22",
+        scriptureText: "“Thus says the Lord: ‘Set your house in order, for you shall die and not recover.’” — Clear, proactive estate organization is a divine command.",
+        indicator: "Estate Legal Coverage Index (Will, Trust, Power of Attorney fully executed).",
+        principle: "House Orderliness: Ensuring all legal and asset structures are fully organized prior to departure."
+      },
+      {
+        name: "10.2 Generational Wealth Transmission", score: 40,
+        concept: "Passing down productive assets (real estate, stocks, business equity) rather than just consumer cash to children and grandchildren, backed by financial literacy training.",
+        scriptureRef: "Proverbs 13:22",
+        scriptureText: "“A good man leaves an inheritance to his children's children, but the sinner's wealth is laid up for the righteous.”",
+        indicator: "Generational Wealth Transfer Capital Reserve Ratio.",
+        principle: "Two-Generation Inheritance: Building wealth designed to bless grandchildren and future descendants."
+      },
+      {
+        name: "10.3 Family Constitution & Governance", score: 40,
+        concept: "Drafting a formal Family Constitution that defines family values, vision, criteria for accessing inheritance, charitable mission goals, and resolution frameworks for family business disputes.",
+        scriptureRef: "Genesis 18:19",
+        scriptureText: "“For I have chosen him, that he may command his children and his household after him to keep the way of the Lord by doing righteousness and justice...”",
+        indicator: "Family Governance Completion Index.",
+        principle: "Covenant Values Transmission: Establishing explicit behavioral, spiritual, and financial standards across generations."
+      },
+      {
+        name: "10.4 Kingdom Endowments & Perpetual Foundations", score: 40,
+        concept: "Establishing donor-advised funds (DAFs), private charitable foundations, or kingdom endowments that distribute ongoing interest and yields to advance gospel projects, end poverty, and support strategic initiatives in perpetuity.",
+        scriptureRef: "Psalm 112:5–9",
+        scriptureText: "“It is well with the man who deals generously and lends; who conducts his affairs with justice... He has distributed freely; he has given to the poor; his righteousness endures forever; his horn is exalted in honor.”",
+        indicator: "Perpetual Endowment Capital Allocation Value.",
+        principle: "Enduring Righteous Impact: Creating financial engines whose charitable yield outlasts human lifetime."
+      }
+    ]
+  }
+];
+
+const principles = [
+  ["Stewardship", "Genesis 1:28; 2:15", "Responsible management"],
+  ["Diligence", "Proverbs 10:4", "Productive habits"],
+  ["Wisdom & planning", "Proverbs 21:5; Luke 14:28", "Plan before acting"],
+  ["Integrity", "Proverbs 11:1; Leviticus 19:35–36", "Honest trade and records"],
+  ["Debt awareness", "Proverbs 22:7", "Responsible borrowing"],
+  ["Generosity", "2 Corinthians 9:6–8", "Give freely and wisely"],
+  ["Faithfulness", "Luke 16:10–12", "Accountability"],
+  ["Contentment", "1 Timothy 6:6–10", "Resist greed"],
+  ["Work & service", "Ephesians 4:28", "Productive work and sharing"],
+  ["Legacy", "Matthew 25:14–30", "Develop resources responsibly"]
+];
+
+const $=id=>document.getElementById(id);
+function num(id){const el = $(id); const n = el ? Number(el.value) : 0; return Number.isFinite(n)?Math.max(0,n):0}
+function fmt(n){return "KSh "+Math.round(n).toLocaleString("en-KE")}
+function esc(s){return String(s || "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+let isMatrixLocked = false;
+let radarChartInstance = null;
+let pieChartInstance = null;
+
+const now = new Date();
+const activeMonthEl = $("activeMonth");
+if(activeMonthEl) activeMonthEl.value = now.toISOString().slice(0, 7);
+
+function renderMatrix(){
+  const matrixEl = $("matrix");
+  if(matrixEl) {
+    matrixEl.innerHTML = modules.map((m,i)=>`
+      <article class="metric">
+        <div class="num">${i+1}. FINANCIAL AREA</div>
+        <h3>${esc(m.title)}</h3>
+        <p>${esc(m.desc)}</p>
+        <div class="ref">${esc(m.scripture)}</div>
+        <div class="scoreline"><span>Score</span><strong id="score-${m.key}">${m.score}%</strong></div>
+        <div class="scoreline"><span>Target</span><strong>${m.target}%</strong></div>
+        <div class="bar"><span id="bar-${m.key}" style="width:${m.score}%"></span></div>
+      </article>
+    `).join("");
+  }
+
+  const subTestingEl = $("subtopicTestingContainer");
+  if(subTestingEl) {
+    subTestingEl.innerHTML = modules.map((m, i) => `
+      <div class="subtopic-group">
+        <div class="subtopic-header">
+          <span>${i+1}. ${esc(m.title)}</span>
+          <span>Avg: <strong id="subtotal-${m.key}">${m.score}%</strong></span>
+        </div>
+        <div class="subtopic-body">
+          <p class="smallmuted" style="margin:0"><em>Scripture:</em> ${esc(m.scripture)}</p>
+          ${m.subtopics.map((sub, sIdx) => `
+            <div class="subtopic-item">
+              <label for="sub-${m.key}-${sIdx}">${esc(sub.name)}</label>
+              <div>
+                <div class="scoreline"><span id="subvalText-${m.key}-${sIdx}">${sub.score}%</span></div>
+                <input type="range" class="range subtopicRange" data-mod="${m.key}" data-subidx="${sIdx}" min="0" max="100" step="5" value="${sub.score}" ${isMatrixLocked ? 'disabled' : ''}>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  const studyContainer = $("studyCurriculumContainer");
+  if(studyContainer) {
+    studyContainer.innerHTML = modules.map((m, i) => `
+      <div class="curriculum-module" id="study-mod-${i+1}">
+        <div class="curriculum-header">
+          <h3>${i+1}. ${esc(m.title.toUpperCase())}</h3>
+          <span class="scripture-badge" style="background:rgba(255,255,255,0.15); border:1px solid var(--gold2); color:#fff; padding:4px 10px; border-radius:12px; font-size:11px;">${esc(m.scripture)}</span>
+        </div>
+        <div class="curriculum-body">
+          <div class="overview-box">
+            <strong>Module Overview:</strong> ${esc(m.overview)}
+          </div>
+          ${m.subtopics.map((sub, sIdx) => `
+            <div class="curriculum-subtopic">
+              <h4>
+                <span>${esc(sub.name)}</span>
+                <span class="pill">Key ${i+1}.${sIdx+1}</span>
+              </h4>
+              <p style="font-size:13px;"><strong>Detailed Concept:</strong> ${esc(sub.concept)}</p>
+              <div class="scripture-box">
+                <strong>Scriptural Anchor: ${esc(sub.scriptureRef)}</strong>
+                ${esc(sub.scriptureText)}
+              </div>
+              <div class="indicator-grid">
+                <div class="indicator-box">
+                  <h5>Modern Financial Indicator</h5>
+                  <p style="margin:0;font-size:12px;">${esc(sub.indicator)}</p>
+                </div>
+                <div class="indicator-box">
+                  <h5>Kingdom Stewardship Principle</h5>
+                  <p style="margin:0;font-size:12px;">${esc(sub.principle)}</p>
+                </div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  const principlesEl = $("principles");
+  if(principlesEl) {
+    principlesEl.innerHTML = principles.map(p=>`
+      <div class="principle">
+        <strong>${esc(p[0])}</strong>
+        <small>${esc(p[1])}</small>
+        <span>${esc(p[2])}</span>
+        <span class="pill">Learn</span>
+      </div>
+    `).join("");
+  }
+
+  document.querySelectorAll(".subtopicRange").forEach(el => {
+    el.addEventListener("input", e => {
+      if(isMatrixLocked) return;
+      const modKey = e.target.dataset.mod;
+      const subIdx = Number(e.target.dataset.subidx);
+      const val = Number(e.target.value);
+      
+      const mod = modules.find(x => x.key === modKey);
+      if(mod) {
+        mod.subtopics[subIdx].score = val;
+        const subText = $(`subvalText-${modKey}-${subIdx}`);
+        if(subText) subText.textContent = val + "%";
+        
+        const avg = Math.round(mod.subtopics.reduce((sum, s) => sum + s.score, 0) / mod.subtopics.length);
+        mod.score = avg;
+        const subTotal = $(`subtotal-${modKey}`);
+        if(subTotal) subTotal.textContent = avg + "%";
+        const scoreEl = $(`score-${modKey}`);
+        if(scoreEl) scoreEl.textContent = avg + "%";
+        const barEl = $(`bar-${modKey}`);
+        if(barEl) barEl.style.width = avg + "%";
+      }
+      calculate();
+    });
+  });
+}
+
+function financialHealth(){
+  const income=num("income"),expenses=num("expenses"),savings=num("savings"),debt=num("debt");
+  if(income===0)return {score:50,balance:income-expenses,savingsMonths:null};
+  const cash=Math.max(0,Math.min(100,(income-expenses)/income*100));
+  const reserve=Math.max(0,Math.min(100,savings/(income*3)*100));
+  const debtScore=Math.max(0,100-Math.min(100,debt/(income*6)*100));
+  return {score:cash*.5+reserve*.3+debtScore*.2,balance:income-expenses,savingsMonths:savings/income};
+}
+
+function calculate(){
+  const alignmentEl = $("alignment");
+  const alignment = alignmentEl ? Number(alignmentEl.value) : 70;
+  
+  if($("alignmentValue")) $("alignmentValue").textContent = alignment + "%";
+  if($("alignmentText")) $("alignmentText").textContent = alignment + "%";
+  if($("alignmentRing")) $("alignmentRing").style.setProperty("--pct", alignment);
+  
+  const knowledge = modules.reduce((s,m)=>s+m.score,0)/modules.length;
+  const health = financialHealth();
+  const kingdomMod = modules.find(m=>m.key==="kingdom");
+  const stewardship = kingdomMod ? kingdomMod.score : 60;
+  const actionChecks = [...document.querySelectorAll(".successfactor")];
+  const action = actionChecks.length ? actionChecks.filter(x=>x.checked).length/actionChecks.length*100 : 0;
+  
+  const overall = Math.round(alignment*.25 + knowledge*.30 + health.score*.25 + stewardship*.10 + action*.10);
+  
+  if($("knowledgeScore")) $("knowledgeScore").textContent = Math.round(knowledge) + "%";
+  if($("healthScore")) $("healthScore").textContent = Math.round(health.score) + "%";
+  if($("balance")) $("balance").textContent = fmt(health.balance);
+  if($("overallScore")) $("overallScore").textContent = overall + "%";
+  if($("overallRing")) $("overallRing").style.setProperty("--pct", overall);
+  
+  const status = overall>=80 ? "Strong readiness" : overall>=65 ? "Developing readiness" : overall>=45 ? "Needs focused development" : "Foundational support needed";
+  if($("overallStatus")) $("overallStatus").textContent = status;
+  if($("statusDesc")) $("statusDesc").textContent = overall>=80 ? "Maintain good habits and build sustainable long-term plans." : overall>=65 ? "You have a foundation; focus on the weakest modules." : overall>=45 ? "Choose a few practical priorities and review them weekly." : "Begin with essentials, basic knowledge and support from a trusted mentor.";
+  
+  renderRecommendations(health, alignment, knowledge);
+}
+
+function renderRecommendations(health, alignment, knowledge){
+  const weakest = [...modules].sort((a,b)=>a.score-b.score).slice(0,3);
+  const rec = [];
+  if(alignment<60) rec.push(["Clarify your purpose","Connect one ability to a real need and test a practical service idea."]);
+  if(health.balance<0) rec.push(["Stabilize cash flow","Review essentials, irregular costs and safe options to increase income."]);
+  if(health.score<60) rec.push(["Build financial resilience","Track expenses, start a realistic reserve and understand debt obligations."]);
+  weakest.forEach(m => rec.push(["Develop: "+m.title, m.desc+". Study the scriptural and practical sub-topics in User Study Dashboard and complete one exercise."]));
+  
+  const kingdomMod = modules.find(m=>m.key==="kingdom");
+  const scriptureRef = kingdomMod ? kingdomMod.scripture : "Luke 16:10-12";
+  const reviewPeriodVal = "90 days";
+
+  rec.push(["Serve with integrity", "Apply "+scriptureRef+" to a real financial decision."]);
+  rec.push(["Review and adjust", "Choose measurable actions for "+reviewPeriodVal+" and reassess your progress."]);
+  
+  const recHtml = rec.slice(0,7).map((r,i)=>`<div class="step"><div class="stepno">${i+1}</div><div><strong>${esc(r[0])}</strong><p>${esc(r[1])}</p></div></div>`).join("");
+  if($("recommendations")) $("recommendations").innerHTML = recHtml;
+  if($("reportRecommendations")) $("reportRecommendations").innerHTML = recHtml;
+}
+
+function getReport(){
+  const health = financialHealth();
+  const knowledge = modules.reduce((s,m)=>s+m.score,0)/modules.length;
+  const alignmentEl = $("alignment");
+  const alignment = alignmentEl ? Number(alignmentEl.value) : 70;
+  const checkedCount = [...document.querySelectorAll(".successfactor")].filter(x=>x.checked).length;
+  const checked = checkedCount > 0 ? (checkedCount / 5) * 100 : 0;
+  const kingdomMod = modules.find(m=>m.key==="kingdom");
+  const stewardship = kingdomMod ? kingdomMod.score : 60;
+  const overall = Math.round(alignment*.25 + knowledge*.30 + health.score*.25 + stewardship*.10 + checked*.10);
+  
+  const activeMonthEl = $("activeMonth");
+  const nameEl = $("name");
+  const ageEl = $("age");
+  const positionEl = $("position");
+  const abilitiesEl = $("abilities");
+  const interestsEl = $("interests");
+  const problemsEl = $("problems");
+  const skillsEl = $("skills");
+  const goalEl = $("goal");
+
+  return {
+    month: activeMonthEl ? activeMonthEl.value : "2026-06",
+    generatedAt: new Date().toISOString(),
+    disclaimer: "Educational readiness index only; not a guarantee of future success or financial advice.",
+    profile: {
+      name: nameEl ? nameEl.value : "",
+      age: ageEl ? ageEl.value : "18–35",
+      position: positionEl ? positionEl.value : "",
+      abilities: abilitiesEl ? abilitiesEl.value : "",
+      interests: interestsEl ? interestsEl.value : "",
+      problemsToSolve: problemsEl ? problemsEl.value : "",
+      skillsToDevelop: skillsEl ? skillsEl.value : "",
+      goal: goalEl ? goalEl.value : ""
+    },
+    finances: {
+      currency: "KES",
+      monthlyIncome: num("income"),
+      monthlyExpenses: num("expenses"),
+      currentSavings: num("savings"),
+      outstandingDebt: num("debt"),
+      monthlyBalance: health.balance,
+      financialHealthScore: Math.round(health.score)
+    },
+    scores: {
+      potentialPurposeAlignment: alignment,
+      knowledgeAverage: Math.round(knowledge),
+      kingdomStewardship: stewardship,
+      successFactorsCompletion: Math.round(checked),
+      overallReadiness: overall
+    },
+    modules: modules.map(m=>({
+      key: m.key,
+      title: m.title,
+      score: m.score,
+      target: m.target,
+      scripture: m.scripture,
+      subtopics: m.subtopics
+    }))
+  };
+}
+
+function initCharts() {
+  const radarEl = $("matrixRadarChart");
+  if(radarEl) {
+    const radarCtx = radarEl.getContext('2d');
+    radarChartInstance = new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: modules.map(m => m.title.replace(/^\d+\.\s*/, '')),
+        datasets: [{
+          label: 'Current Score (%)',
+          data: modules.map(m => m.score),
+          backgroundColor: 'rgba(23, 134, 76, 0.2)',
+          borderColor: '#17864c',
+          pointBackgroundColor: '#c99b31',
+          borderWidth: 2
+        }, {
+          label: 'Target (%)',
+          data: modules.map(m => m.target),
+          backgroundColor: 'rgba(8, 45, 73, 0.05)',
+          borderColor: '#082d49',
+          borderDash: [5,5],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: { min: 0, max: 100, ticks: { stepSize: 25 } }
+        }
+      }
+    });
+  }
+
+  const pieEl = $("healthPieChart");
+  if(pieEl) {
+    const pieCtx = pieEl.getContext('2d');
+    const inc = num("income"), exp = num("expenses"), sav = num("savings"), debt = num("debt");
+    pieChartInstance = new Chart(pieCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Expenses', 'Savings', 'Debt Obligation', 'Net Surplus'],
+        datasets: [{
+          data: [exp, sav, debt, Math.max(0, inc - exp - sav)],
+          backgroundColor: ['#b9443d', '#c99b31', '#082d49', '#17864c']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+}
+
+function updateCharts() {
+  if(radarChartInstance) {
+    radarChartInstance.data.datasets[0].data = modules.map(m => m.score);
+    radarChartInstance.update();
+  }
+  if(pieChartInstance) {
+    const inc = num("income"), exp = num("expenses"), sav = num("savings"), debt = num("debt");
+    pieChartInstance.data.datasets[0].data = [exp, sav, debt, Math.max(0, inc - exp - sav)];
+    pieChartInstance.update();
+  }
+}
+
+const navInputTab = $("navInputTab");
+const navStudyTab = $("navStudyTab");
+const navReportTab = $("navReportTab");
+
+if(navInputTab && navStudyTab && navReportTab) {
+  navInputTab.addEventListener("click", () => {
+    navInputTab.classList.add("active");
+    navStudyTab.classList.remove("active");
+    navReportTab.classList.remove("active");
+    if($("userInputDashboard")) $("userInputDashboard").classList.remove("hidden");
+    if($("userStudyDashboard")) $("userStudyDashboard").classList.add("hidden");
+    if($("userReportDashboard")) $("userReportDashboard").classList.add("hidden");
+  });
+
+  navStudyTab.addEventListener("click", () => {
+    navStudyTab.classList.add("active");
+    navInputTab.classList.remove("active");
+    navReportTab.classList.remove("active");
+    if($("userStudyDashboard")) $("userStudyDashboard").classList.remove("hidden");
+    if($("userInputDashboard")) $("userInputDashboard").classList.add("hidden");
+    if($("userReportDashboard")) $("userReportDashboard").classList.add("hidden");
+  });
+
+  navReportTab.addEventListener("click", () => {
+    navReportTab.classList.add("active");
+    navInputTab.classList.remove("active");
+    navStudyTab.classList.remove("active");
+    if($("userReportDashboard")) $("userReportDashboard").classList.remove("hidden");
+    if($("userInputDashboard")) $("userInputDashboard").classList.add("hidden");
+    if($("userStudyDashboard")) $("userStudyDashboard").classList.add("hidden");
+    
+    const report = getReport();
+    const summaryHeader = $("reportSummaryHeader");
+    if(summaryHeader) {
+      summaryHeader.innerHTML = `
+        <div><strong>User:</strong> ${esc(report.profile.name || 'Anonymous')}</div>
+        <div><strong>Active Month:</strong> ${report.month}</div>
+        <div><strong>Overall Readiness:</strong> ${report.scores.overallReadiness}%</div>
+        <div><strong>Financial Health:</strong> ${report.finances.financialHealthScore}%</div>
+      `;
+    }
+    updateCharts();
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const auth = window.firebaseAuth;
+  const db = window.firebaseDb;
+
+  const tabLoginBtn = $("tabLoginBtn");
+  const tabSignupBtn = $("tabSignupBtn");
+  if(tabLoginBtn && tabSignupBtn) {
+    tabLoginBtn.addEventListener("click", () => {
+      tabLoginBtn.classList.add("active");
+      tabSignupBtn.classList.remove("active");
+      if($("loginFormContainer")) $("loginFormContainer").classList.remove("hidden");
+      if($("signupFormContainer")) $("signupFormContainer").classList.add("hidden");
+    });
+    tabSignupBtn.addEventListener("click", () => {
+      tabSignupBtn.classList.add("active");
+      tabLoginBtn.classList.remove("active");
+      if($("signupFormContainer")) $("signupFormContainer").classList.remove("hidden");
+      if($("loginFormContainer")) $("loginFormContainer").classList.add("hidden");
+    });
+  }
+
+  if(auth && db) {
+    window.onAuthStateChanged(auth, user => {
+      if(user) {
+        if($("landingPage")) $("landingPage").classList.add("hidden");
+        if($("authStatus")) $("authStatus").textContent = `Logged in as: ${user.email}`;
+        const activeMonthEl = $("activeMonth");
+        const monthKey = activeMonthEl ? activeMonthEl.value : now.toISOString().slice(0, 7);
+        loadMonthlyData(user.uid, monthKey);
+        loadMonthlyHistory(user.uid);
+      } else {
+        if($("landingPage")) $("landingPage").classList.remove("hidden");
+        if($("authStatus")) $("authStatus").textContent = "Authentication required";
+      }
+    });
+
+    const loginBtn = $("landingLoginBtn");
+    if(loginBtn) {
+      loginBtn.addEventListener("click", () => {
+        const email = $("landingEmail")?.value || "";
+        const pass = $("landingPassword")?.value || "";
+        window.signInWithEmailAndPassword(auth, email, pass).catch(err => {
+          if($("landingError")) $("landingError").textContent = err.message;
+        });
+      });
+    }
+
+    const registerBtn = $("landingRegisterBtn");
+    if(registerBtn) {
+      registerBtn.addEventListener("click", () => {
+        const email = $("landingSignupEmail")?.value || "";
+        const pass = $("landingSignupPassword")?.value || "";
+        window.createUserWithEmailAndPassword(auth, email, pass).catch(err => {
+          if($("landingError")) $("landingError").textContent = err.message;
+        });
+      });
+    }
+
+    const forgotLink = $("forgotPasswordLink");
+    if(forgotLink) {
+      forgotLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        const email = $("landingEmail")?.value || "";
+        if(!email) { alert("Please enter your email address first."); return; }
+        window.sendPasswordResetEmail(auth, email).then(() => alert("Password reset email sent!")).catch(err => alert(err.message));
+      });
+    }
+
+    const logoutBtn = $("headerLogout");
+    if(logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        window.signOut(auth).catch(err => alert(err.message));
+      });
+    }
+
+    const saveCloudBtn = $("saveCloud");
+    if(saveCloudBtn) {
+      saveCloudBtn.addEventListener("click", async () => {
+        const user = auth.currentUser;
+        if(!user) { alert("Please log in first."); return; }
+        const activeMonthEl = $("activeMonth");
+        const monthKey = activeMonthEl ? activeMonthEl.value : now.toISOString().slice(0, 7);
+        try {
+          const report = getReport();
+          await window.setDoc(window.doc(window.firebaseDb, "users", user.uid, "monthly_matrices", monthKey), report);
+          await window.setDoc(window.doc(window.firebaseDb, "users", user.uid), {email: user.email, updatedAt: window.serverTimestamp()}, {merge:true});
+          if($("cloudStatus")) $("cloudStatus").textContent = `Successfully saved matrix for ${monthKey} to database!`;
+          loadMonthlyHistory(user.uid);
+        } catch(e) {
+          console.error(e);
+          if($("cloudStatus")) $("cloudStatus").textContent = "Error saving: " + e.message;
+        }
+      });
+    }
+
+    const activeMonthInput = $("activeMonth");
+    if(activeMonthInput) {
+      activeMonthInput.addEventListener("change", () => {
+        const user = auth.currentUser;
+        if(user) {
+          loadMonthlyData(user.uid, activeMonthInput.value);
+        }
+      });
+    }
+  }
+
+  initCharts();
+  renderMatrix();
+  calculate();
+});
+
+async function loadMonthlyData(uid, monthKey) {
+  try {
+    const snap = await window.getDoc(window.doc(window.firebaseDb, "users", uid, "monthly_matrices", monthKey));
+    if(snap.exists()) {
+      const data = snap.data();
+      if(data.profile) {
+        if($("name")) $("name").value = data.profile.name || "";
+        if($("age")) $("age").value = data.profile.age || "18–35";
+        if($("position")) $("position").value = data.profile.position || "";
+        if($("abilities")) $("abilities").value = data.profile.abilities || "";
+        if($("interests")) $("interests").value = data.profile.interests || "";
+        if($("problems")) $("problems").value = data.profile.problemsToSolve || "";
+        if($("skills")) $("skills").value = data.profile.skillsToDevelop || "";
+        if($("goal")) $("goal").value = data.profile.goal || "";
+      }
+      if(data.finances) {
+        if($("income")) $("income").value = data.finances.monthlyIncome || 0;
+        if($("expenses")) $("expenses").value = data.finances.monthlyExpenses || 0;
+        if($("savings")) $("savings").value = data.finances.currentSavings || 0;
+        if($("debt")) $("debt").value = data.finances.outstandingDebt || 0;
+      }
+      if(data.scores) {
+        if($("alignment")) $("alignment").value = data.scores.potentialPurposeAlignment || 70;
+      }
+      if(data.modules) {
+        data.modules.forEach(cloudMod => {
+          const m = modules.find(x => x.key === cloudMod.key);
+          if(m) {
+            m.score = cloudMod.score;
+            if(cloudMod.subtopics) m.subtopics = cloudMod.subtopics;
+          }
+        });
+        renderMatrix();
+      }
+      if($("cloudStatus")) $("cloudStatus").textContent = `Loaded matrix for ${monthKey} from database.`;
+    } else {
+      if($("cloudStatus")) $("cloudStatus").textContent = `No saved matrix for ${monthKey}. Ready for new inputs.`;
+    }
+    calculate();
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+async function loadMonthlyHistory(uid) {
+  try {
+    const colSnap = await window.getDocs(window.collection(window.firebaseDb, "users", uid, "monthly_matrices"));
+    const rows = [];
+    colSnap.forEach(docSnap => {
+      const d = docSnap.data();
+      rows.push(`<tr><td><strong>${esc(d.month)}</strong></td><td>${d.finances ? d.finances.financialHealthScore + '%' : '—'}</td><td>${d.scores ? d.scores.knowledgeAverage + '%' : '—'}</td><td>${d.scores ? d.scores.overallReadiness + '%' : '—'}</td></tr>`);
+    });
+    const historyBody = $("historyTableBody");
+    if(historyBody) {
+      if(rows.length > 0) {
+        historyBody.innerHTML = rows.join("");
+      } else {
+        historyBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--muted)">No saved records yet</td></tr>`;
+      }
+    }
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+const evaluateBtn = $("evaluate");
+if(evaluateBtn) {
+  evaluateBtn.addEventListener("click", () => {
+    calculate();
+    isMatrixLocked = true;
+    const lockedMsg = $("lockedMessage");
+    if(lockedMsg) {
+      lockedMsg.classList.remove("hidden");
+      lockedMsg.innerHTML = `<div class="locked-banner">Matrix Evaluated & Locked. Sub-topics and input profile parameters are now locked against further edits for this session.</div>`;
+    }
+    document.querySelectorAll(".subtopicRange, #alignment, #income, #expenses, #savings, #debt").forEach(el => el.disabled = true);
+    if($("exportMessage")) $("exportMessage").textContent = "Matrix successfully evaluated and locked.";
+  });
+}
+
+const resetBtn = $("reset");
+if(resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    if(isMatrixLocked) { alert("Matrix is locked. Cannot reset locked evaluation."); return; }
+    if(!confirm("Reset this matrix to sample starting values?")) return;
+    document.querySelectorAll("input[type=text],textarea").forEach(x=>x.value="");
+    if($("age")) $("age").value = "18–35";
+    if($("position")) $("position").value = "Self-employed / business owner";
+    if($("income")) $("income").value = 20000;
+    if($("expenses")) $("expenses").value = 11000;
+    if($("savings")) $("savings").value = 3000;
+    if($("debt")) $("debt").value = 0;
+    if($("alignment")) $("alignment").value = 70;
+    modules.forEach(m => m.subtopics.forEach(sub => sub.score = 50));
+    modules.forEach(m => m.score = 50);
+    renderMatrix();
+    calculate();
+    if($("exportMessage")) $("exportMessage").textContent = "Assessment reset.";
+  });
+}
+
+const exportPdfBtn = $("exportPdfBtn");
+if(exportPdfBtn) {
+  exportPdfBtn.addEventListener("click", () => {
+    const element = $("reportPrintArea");
+    const activeMonthEl = $("activeMonth");
+    const monthVal = activeMonthEl ? activeMonthEl.value : "report";
+    const opt = {
+      margin:       10,
+      filename:     `financial-matrix-report-${monthVal}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().from(element).set(opt).save();
+    if($("exportMessage")) $("exportMessage").textContent = "PDF export initiated successfully.";
+  });
+}
+
+const printReportBtn = $("printReportBtn");
+if(printReportBtn) {
+  printReportBtn.addEventListener("click", () => window.print());
+}
+
+const alignmentInput = $("alignment");
+if(alignmentInput) alignmentInput.addEventListener("input", calculate);
+
+["income","expenses","savings","debt"].forEach(id => {
+  const el = $(id);
+  if(el) el.addEventListener("input", calculate);
+});
+
+document.querySelectorAll(".successfactor").forEach(x => x.addEventListener("change", calculate));
+</script>
+</body>
+</html>
